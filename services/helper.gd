@@ -1,7 +1,5 @@
 extends Node
 
-class_name HelperService
-
 enum {
 	FORMAT_HOURS   = 0x2,
 	FORMAT_MINUTES = 0x4,

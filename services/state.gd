@@ -1,7 +1,5 @@
 extends Node
 
-class_name StateService
-
 var _user_data = {}
 var _path = "user://states"
 var _name = "state.dat"
@@ -10,7 +8,7 @@ var _zip_extend = ".gdzip"
 var _timer = null
 var _is_data_changed = true
 
-var helper: HelperService = null
+var helper = null
 
 @export var _pwd = ""
 @export var _save_timeout_sec = 30

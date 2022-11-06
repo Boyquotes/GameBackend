@@ -1,17 +1,17 @@
 extends Node
 
-var state:StateService = null :
+var state = null :
 	get:
 		if state == null:
-			state = StateService.new()
+			state = load("res://addons/GameBackend/services/state.gd").new()
 			state.helper = helper
 			add_child(state)
 		return state
 	
-var helper:HelperService = null :
+var helper = null :
 	get:
 		if helper == null:
-			helper = HelperService.new()
+			helper = load("res://addons/GameBackend/services/helper.gd").new()
 			add_child(helper)
 		return helper
 	
