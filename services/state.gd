@@ -1,53 +1,123 @@
 extends Node
 
-var _user_data = {}
-var _path = "user://states"
-var _name = "state.dat"
-var _path_to_state = _path + "/" + _name
-var _zip_extend = ".gdzip"
-var _timer = null
-var _is_data_changed = true
+const CUR_STATES_PATH = "user://states/state.txt"
+const STATES_ARCHIVE = "user://states/zip_archive"
+const CUR_ZIP_PATH = "user://states/zip_archive/%s_state.zip"
 
-var helper = null
+var _user_data = {}
+var _timer:Timer = null
+var _is_data_changed = false
+var log = null
+
+var _guard : Mutex
+var _semaphore : Semaphore
+var _thread : Thread
+var _exit_thread = false
 
 @export var _pwd = ""
 @export var _save_timeout_sec = 30
 
+func write_zip_file():
+	var writer = ZIPPacker.new()
+	var err = writer.open(CUR_ZIP_PATH % Time.get_datetime_string_from_system(true))
+	if err != OK:
+		return err
+	writer.start_file("state.txt")
+	writer.write_file(FileAccess.get_file_as_bytes(CUR_STATES_PATH));
+	writer.close_file()
+	writer.close()
+	return OK
+
 func _ready():
-	#Services.helper
-	print("State service started.")
+	assert(log)
+	log.info("State service started.")
 	_timer = Timer.new()
 	_timer.connect("timeout", Callable(self, "_on_timer_timeout"))
 	add_child(_timer)
 	_timer.wait_time = _save_timeout_sec
-	if not DirAccess.dir_exists_absolute(_path):
-		DirAccess.make_dir_absolute(_path)
+	if !DirAccess.dir_exists_absolute(STATES_ARCHIVE):
+		DirAccess.make_dir_absolute(STATES_ARCHIVE)
 	_load_data()
+	_guard = Mutex.new()
+	_semaphore = Semaphore.new()
+	_thread = Thread.new()
+	_thread.start(Callable(self,"_thread_process"))
 	
 func _exit_tree():
-	print("State service > Exit tree:  save state " + _path_to_state)
+	log.info("State service > Exit tree")
 	save_data()
+	_guard.lock()
+	_exit_thread = true
+	_guard.unlock()
+	_semaphore.post()
+	_thread.wait_to_finish()
 
 func _on_timer_timeout():
-	print("State service > Timer timeout: - save state " + _path_to_state)
+	log.debug("State service > Timer timeout")
 	save_data()
 	
+func _get_dict_from_json_file(path:String, pwd:String)->Dictionary:
+	if FileAccess.file_exists(path):
+		var file = FileAccess.open_encrypted_with_pass(path, FileAccess.READ, pwd) if !OS.is_debug_build() else FileAccess.open(path, FileAccess.READ)
+		if file:
+			var json = JSON.new()
+			var state = json.parse(file.get_as_text(true))
+			if state == OK:
+				log.info("State service > Loaded "  + path)
+				return json.data
+			else:
+				log.error("State service > JSON Parse Error: ", json.get_error_message(), " at line ", json.get_error_line(), ", " + path)
+				OS.alert("State service > JSON Parse Error: " + json.get_error_message() + " at line " + str(json.get_error_line()) + ", " + path)
+		else:
+			log.error("State service > File error(load): " + Helper.error_str[FileAccess.get_open_error()] + ", " + path)
+			OS.alert("State service > File error(load): " + Helper.error_str[FileAccess.get_open_error()] + ", " + path)
+	else:
+		log.info("State service > File not exists " + path)
+	return {}
+
+func _set_dict_to_json_file(dict:Dictionary, path:String, pwd:String):
+	var file = FileAccess.open_encrypted_with_pass(path, FileAccess.WRITE, pwd) if !OS.is_debug_build() else FileAccess.open(path, FileAccess.WRITE)
+	if file:
+		file.store_line(JSON.stringify(dict))
+	else:
+		log.error("State service > File error(save): " + Helper.error_str[FileAccess.get_open_error()] + ", " + path)
+		OS.alert("State service > File error(save): " + Helper.error_str[FileAccess.get_open_error()] + ", " + path)
+	
 func _load_data():
-	if helper:
-		print("State service > Loading...: " + _path_to_state)
-		_user_data = helper.get_dict_from_encrypted_json(_path_to_state, _pwd)
+	log.info("State service > Loading...")
+	_user_data = _get_dict_from_json_file(CUR_STATES_PATH, _pwd)
 
 func save_data():
-	if _is_data_changed == false:
-		return
-	if helper:
-		helper.set_dict_to_encrypted_json(_user_data, _path_to_state, _pwd)
-		print("State service >  Save state: ", _path_to_state)
+	log.debug("State service > Saving...")
+	if _is_data_changed:
+		_semaphore.post()
 		_is_data_changed = false
 		_timer.start()
 	
 func set_dict(key:String, dict:Dictionary):
+	_guard.lock()
 	_user_data[key] = dict
+	_guard.unlock()
+	_is_data_changed = true
 	
 func get_dict(key:String)->Dictionary:
 	return _user_data[key] if _user_data.has(key) else {}
+	
+func _thread_process():
+	while true:
+		_semaphore.wait()
+
+		_guard.lock()
+		var should_exit = _exit_thread
+		_guard.unlock()
+
+		if should_exit:
+			break
+
+		if _user_data.is_empty():
+			continue
+		else:
+			_guard.lock()
+			var saved_data = _user_data.duplicate(true)
+			_guard.unlock()
+			_set_dict_to_json_file(saved_data, CUR_STATES_PATH, _pwd)

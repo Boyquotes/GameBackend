@@ -1,4 +1,4 @@
-extends Node
+class_name Helper
 
 enum {
 	FORMAT_HOURS   = 0x2,
@@ -59,11 +59,8 @@ const error_str = {
 	ERR_PRINTER_ON_FIRE: "Printer on fire error. (This is an easter egg, no engine methods return this error code.)"
 } 
 
-func _ready():
-	print("Helper service started")
-	randomize()
 
-func format_timestamp_to_str(time, format = FORMAT_DEFAULT, digit_format = "%02d")->String:
+static func format_timestamp_to_str(time, format = FORMAT_DEFAULT, digit_format = "%02d")->String:
 	var digits = []
 
 	if format & FORMAT_HOURS:
@@ -87,7 +84,7 @@ func format_timestamp_to_str(time, format = FORMAT_DEFAULT, digit_format = "%02d
 			formatted += colon
 	return formatted
 
-func _find_all_files_recursive(find_dir:String, extension:String, paths:Dictionary):
+static func find_all_files_recursive(find_dir:String, extension:String, paths:Dictionary):
 	var dir = DirAccess.open(find_dir)
 	if dir:
 		dir.list_dir_begin()
@@ -96,7 +93,7 @@ func _find_all_files_recursive(find_dir:String, extension:String, paths:Dictiona
 			if next_item.is_empty():
 				break
 			if dir.current_is_dir() && next_item != "." && next_item != "..":
-				_find_all_files_recursive(dir.get_current_dir() + "/" + next_item + "/", extension, paths)
+				find_all_files_recursive(dir.get_current_dir() + "/" + next_item + "/", extension, paths)
 			elif next_item.get_extension() == extension:
 				if paths.has(next_item.get_basename()):
 					print("Error. Duplicate resources " + next_item)
@@ -106,41 +103,9 @@ func _find_all_files_recursive(find_dir:String, extension:String, paths:Dictiona
 	else:
 		print("An error occurred when trying to access the path " + find_dir)
 		
-func find_all_files_dict(start_dir:String, extension:String)->Dictionary:
-	var ret = {}
-	_find_all_files_recursive(start_dir, extension, ret)
-	return ret
+static func find_all_files_dict(start_dir:String, extension:String, result:Dictionary = {}):
+	find_all_files_recursive(start_dir, extension, result)
 	
-func find_all_files_array(start_dir:String, extension:String)->Array:
-	return find_all_files_dict(start_dir, extension).values()
+static func find_all_files_array(start_dir:String, extension:String, result:Array = []):
+	result = find_all_files_dict(start_dir, extension).values()
 
-func get_dict_from_encrypted_json(path:String, pwd:String)->Dictionary:
-	if FileAccess.file_exists(path):
-		#var file = FileAccess.open_encrypted_with_pass(path, FileAccess.READ, pwd)
-		var file = FileAccess.open(path, FileAccess.READ)
-		if file:
-			var json = JSON.new()
-			var state = json.parse(file.get_as_text(true))
-			if state == OK:
-				print("Helper service > Loaded " + path)
-				return json.data
-			else:
-				print("Helper service > JSON Parse Error: ", json.get_error_message(), " at line ", json.get_error_line(), ", " + path)
-				OS.alert("Helper service > JSON Parse Error: " + json.get_error_message() + " at line " + json.get_error_line() + ", " + path)
-		else:
-			print("Helper service > File error: " + error_str[FileAccess.get_open_error()] + ", " + path)
-			OS.alert("Helper service > File error: " + error_str[FileAccess.get_open_error()] + ", " + path)
-	else:
-		print("Helper service > File not exists " + path)
-	return {}
-	
-func set_dict_to_encrypted_json(dict:Dictionary, path:String, pwd:String):
-	#var file = FileAccess.open_encrypted_with_pass(path, FileAccess.WRITE, pwd)
-	var file = FileAccess.open(path, FileAccess.WRITE)
-	if file:
-		var test = JSON.stringify(dict)
-		file.store_line(JSON.stringify(dict))
-	else:
-		print("Helper service > File error: " + error_str[FileAccess.get_open_error()] + ", " + path)
-		OS.alert("Helper service > File error: " + error_str[FileAccess.get_open_error()] + ", " + path)
-		
