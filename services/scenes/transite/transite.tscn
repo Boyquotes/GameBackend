@@ -1,0 +1,121 @@
+[gd_scene load_steps=8 format=3 uid="uid://clx45edh5q1"]
+
+[ext_resource type="Texture2D" uid="uid://dq3q3ed5t0j62" path="res://addons/GameBackend/services/scenes/transite/tmp_back_hint_transit.png" id="1_b6qns"]
+[ext_resource type="PackedScene" uid="uid://xb0qk2xvvc5j" path="res://addons/GameBackend/common_scenes/tpb_start_progress.tscn" id="1_jvxjj"]
+[ext_resource type="Script" path="res://addons/GameBackend/services/scenes/transite/transite.gd" id="1_wollv"]
+
+[sub_resource type="Animation" id="Animation_6y0dj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CR_Background_color:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_iw84s"]
+resource_name = "fade"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CR_Background_color:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_qql5q"]
+resource_name = "rise"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CR_Background_color:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7gtr8"]
+_data = {
+"RESET": SubResource("Animation_6y0dj"),
+"fade": SubResource("Animation_iw84s"),
+"rise": SubResource("Animation_qql5q")
+}
+
+[node name="Transite" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wollv")
+
+[node name="CR_Background_color" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TR_Background_tex" type="TextureRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_b6qns")
+ignore_texture_size = true
+stretch_mode = 6
+
+[node name="L_Hint" type="Label" parent="TR_Background_tex"]
+anchors_preset = -1
+anchor_left = 0.025
+anchor_top = 0.444
+anchor_right = 0.977
+anchor_bottom = 0.608
+offset_left = 0.199999
+offset_top = 0.287964
+offset_right = -0.504028
+offset_bottom = 0.0159607
+grow_horizontal = 2
+grow_vertical = 2
+text = "Тут можно  выводить текстовые подсказки пока грузится сцена в фоне."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="TPB_start_progress" parent="TR_Background_tex" instance=ExtResource("1_jvxjj")]
+anchor_left = 0.034
+anchor_top = 0.798
+anchor_bottom = 0.85
+offset_left = -0.167999
+offset_top = -0.104004
+offset_right = 4.104
+offset_bottom = 0.199951
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_7gtr8")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

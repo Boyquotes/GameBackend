@@ -1,36 +1,53 @@
+# Ленивая инициализация сервисов, реализация паттерна сервис локатор
+
 extends Node
 
-@onready var logger = load("res://addons/GameBackend/services/logger.gd").new()
+var _logger:Logger = null
 
 func _ready():
-	if logger:
-		add_child(logger)
+	# Логер запускаем отдельно и первым для установки его инстанса
+	_logger = load("res://addons/GameBackend/services/logger.gd").new()
+	if _logger:
+		add_child(_logger)
+	# Проверяем, что установлена стартовая сплеш сцена
+	var main_scene = ProjectSettings.get_setting("application/run/main_scene")
+	var splash_scene = "res://addons/GameBackend/services/scenes/splash/splash.tscn"
+	if main_scene != splash_scene:
+		OS.alert("Текущая стартовая сцена {0}, а должна быть {1}".format([main_scene, splash_scene]))
+		
+func _get_singleton(service, path:String):
+	if service == null:
+		service = load(path).new()
+		add_child(service)
+	return service
 
 var state = null :
 	get:
-		if state == null:
-			state = load("res://addons/GameBackend/services/state.gd").new()
-			state.log = log
-			add_child(state)
-		return state
-	
-var helper = null :
-	get:
-		if helper == null:
-			helper = load("res://addons/GameBackend/services/helper.gd").new()
-			add_child(helper)
-		return helper
+		return _get_singleton(state, "res://addons/GameBackend/services/state.gd")
 		
-var log = null :
+var logs:LoggotLogger = null :
 	get:
-		if log == null:
-			log = logger.get_logger("main_log")
+		if logs == null:
+			logs = _logger.get_logger()
+			# пресет логера для отладки - собираем более широкую воронку
 			if OS.is_debug_build():
-				log.attach_appender(LoggotAsyncAppender.new(LoggotFileAppender.new()))
-				log.attach_appender(LoggotAsyncAppender.new(LoggotConsoleAppender.new()))
-				log.set_level(LoggotConstants.Level.DEBUG)
+				logs.attach_appender(LoggotAsyncAppender.new(LoggotFileAppender.new()))
+				logs.attach_appender(LoggotAsyncAppender.new(LoggotConsoleAppender.new()))
+				logs.set_level(LoggotConstants.Level.DEBUG)
 			else:
-				log.attach_appender(LoggotAsyncAppender.new(LoggotFileAppender.new()))
-				log.set_level(LoggotConstants.Level.WARN)
-		return log
-	
+				# пресет для релиза - берем только предупреждения и ошибки
+				logs.attach_appender(LoggotAsyncAppender.new(LoggotFileAppender.new()))
+				logs.set_level(LoggotConstants.Level.WARN)
+		return logs
+		
+var resource = null :
+	get:
+		return _get_singleton(resource, "res://addons/GameBackend/services/resources.gd")
+		
+var scenes = null :
+	get:
+		return _get_singleton(scenes, "res://addons/GameBackend/services/scenes.gd")
+		
+var sounds = null :
+	get:
+		return _get_singleton(sounds, "res://addons/GameBackend/services/sound.gd")
