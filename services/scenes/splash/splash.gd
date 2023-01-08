@@ -58,8 +58,6 @@ func on_init_complited():
 			$TPB_start_progress.value = 100
 			# Убрать сплеш сцену из рута. В руте лежат автолоад синглтоны и сцены!
 			get_tree().change_scene_to_packed(packedScene)
-			get_tree().root.remove_child(self)
-			queue_free()
 		else:
 			var message = "Splash scene > {0} - not a PackedScene".format([scene_path])
 			logs.error(message)

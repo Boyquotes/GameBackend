@@ -16,7 +16,7 @@ var _semaphore : Semaphore
 var _thread : Thread
 var _exit_thread = false
 
-@export var _pwd = ""
+@export var _pwd:String
 @export var _save_timeout_sec = 30
 
 func write_zip_file():
@@ -34,11 +34,11 @@ func _ready():
 	assert(logs)
 	logs.info("State service > started.")
 	_timer = Timer.new()
-	_timer.connect("timeout", Callable(self, "_on_timer_timeout"))
-	add_child(_timer)
+	_timer.timeout.connect(_on_timer_timeout)
 	_timer.wait_time = _save_timeout_sec
+	add_child(_timer)
 	if !DirAccess.dir_exists_absolute(STATES_ARCHIVE):
-		DirAccess.make_dir_absolute(STATES_ARCHIVE)
+		DirAccess.make_dir_recursive_absolute(STATES_ARCHIVE)
 	_load_data()
 	_guard = Mutex.new()
 	_semaphore = Semaphore.new()

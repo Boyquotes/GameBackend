@@ -17,7 +17,7 @@ func _init(appender : LoggotAppender):
 		_appender = appender
 
 func do_append(event : LoggotEvent):
-	if !_appender || !_appender.is_started():
+	if !_appender:
 		return
 		
 	_guard.lock()
@@ -48,7 +48,7 @@ func stop():
 		_appender.stop()
 
 func is_started()->bool:
-	return _appender != null
+	return _thread.is_started()
 
 func flush():
 	if _appender:
@@ -57,7 +57,6 @@ func flush():
 func _thread_append_events():
 	while true:
 		_semaphore.wait()
-
 		_guard.lock()
 		var should_exit = _exit_thread
 		_guard.unlock()

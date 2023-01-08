@@ -49,7 +49,7 @@ func start()->bool:
 		
 	if _file == null:
 		_file = FileAccess.open(CUR_LOG_PATH, FileAccess.WRITE)
-#		
+
 	if _file != null:
 		_file.seek_end()
 		return true
