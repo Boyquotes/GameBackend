@@ -1,0 +1,52 @@
+[gd_scene load_steps=3 format=3 uid="uid://3ns5jprr6xoc"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/fields/hbc_id_file.gd" id="1_4dwid"]
+[ext_resource type="Texture2D" uid="uid://bkdnq67ly2u1u" path="res://addons/GameBackend/icons/PNG/White/1x/minus.png" id="2_d67kw"]
+
+[node name="HBC_id_file" type="HBoxContainer"]
+anchors_preset = -1
+anchor_right = 0.236
+anchor_bottom = 0.048
+offset_right = -271.872
+offset_bottom = -31.104
+theme_override_constants/separation = 5
+script = ExtResource("1_4dwid")
+
+[node name="L_id" type="Label" parent="."]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Interactive ID"
+horizontal_alignment = 2
+clip_text = true
+
+[node name="OB_id" type="OptionButton" parent="."]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+tooltip_text = "Select any other than the current ID"
+
+[node name="L_path" type="Label" parent="."]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Path to sound"
+horizontal_alignment = 2
+clip_text = true
+
+[node name="LE_path" type="LineEdit" parent="."]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 20.0
+placeholder_text = "res://game/sounds/my_sound.ogg"
+alignment = 2
+structured_text_bidi_override = 2
+
+[node name="TB_close" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture_normal = ExtResource("2_d67kw")
+ignore_texture_size = true
+stretch_mode = 4
+
+[connection signal="text_submitted" from="LE_path" to="." method="_on_le_path_text_submitted"]
+[connection signal="pressed" from="TB_close" to="." method="_on_tb_close_pressed"]

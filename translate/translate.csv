@@ -1,0 +1,10 @@
+якорь/язык,zh,es,en,hi,ar,bn,pt,ru,ja,pa_PK,mr_IN,te,ms,tr,ko,fr,de,vi,ta,ur
+anc_interactive_id,,,Interactive ID,,,,,ID интерактива,,,,,,,,,,,,
+anc_collision_sound,,,Collision sound,,,,,Звук при столкновении,,,,,,,,,,,,
+anc_saved_to_file,,,"Saved to file ",,,,,"Сохранено в файл ",,,,,,,,,,,,
+anc_file_not_exist,,,File not exist or error in link,,,,,Файл не существует или допущена ошибка в пути,,,,,,,,,,,,
+anc_id_name_error,,,Error in the interactive name,,,,,Ошибка в имени интерактива,,,,,,,,,,,,
+anc_base_properties,,,Base properties,,,,,Базовые свойства,,,,,,,,,,,,
+anc_damage,,,Damage,,,,,Урон,,,,,,,,,,,,
+anc_hitpoints,,,Hitpoints,,,,,Очки здоровья,,,,,,,,,,,,
+anc_error_block_no_find,,,"Block not find ",,,,,"Блок не обнаружен ",,,,,,,,,,,,

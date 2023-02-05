@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://sia27ke2upoj"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/VBC_dynamic_fields.gd" id="1_newgg"]
+
+[node name="VBC_dynamic_fields" type="VBoxContainer"]
+script = ExtResource("1_newgg")

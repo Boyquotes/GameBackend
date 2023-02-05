@@ -103,9 +103,36 @@ static func find_all_files_recursive(find_dir:String, extension:String, paths:Di
 	else:
 		print("An error occurred when trying to access the path " + find_dir)
 		
-static func find_all_files_dict(start_dir:String, extension:String, result:Dictionary = {}):
+static func find_all_files_dict(start_dir:String, extension:String)->Dictionary:
+	var result:Dictionary
 	find_all_files_recursive(start_dir, extension, result)
+	return result
 	
-static func find_all_files_array(start_dir:String, extension:String, result:Array = []):
-	result = find_all_files_dict(start_dir, extension).values()
+static func find_all_files_array(start_dir:String, extension:String)->Array:
+	return find_all_files_dict(start_dir, extension).keys()
+	
+static func save_dict_to_json_file(path:String, dict:Dictionary, pwd:String = ""):
+	var file = FileAccess.open_encrypted_with_pass(path, FileAccess.WRITE, pwd) if !OS.is_debug_build() else FileAccess.open(path, FileAccess.WRITE)
+	if file:
+		file.store_line(JSON.stringify(dict))
+	else:
+		var message = "State service > File error(save):{0}, {1}".format([Helper.error_str[FileAccess.get_open_error()], path])
+		OS.alert(message)
+		
+static func load_dict_from_json_file(path:String, pwd:String = "")->Dictionary:
+	if FileAccess.file_exists(path):
+		var file = FileAccess.open_encrypted_with_pass(path, FileAccess.READ, pwd) if !OS.is_debug_build() else FileAccess.open(path, FileAccess.READ)
+		if file:
+			var json = JSON.new()
+			var state = json.parse(file.get_as_text(true))
+			if state == OK:
+				return json.data
+			else:
+				var message = "State service > JSON Parse Error:{0} at line {1}, {2}".format([json.get_error_message(), json.get_error_line(), path])
+				OS.alert(message)
+		else:
+			var message = "State service > File error(load):{0}, {1}".format([Helper.error_str[FileAccess.get_open_error()], path])
+			OS.alert(message)
+
+	return {}
 

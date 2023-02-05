@@ -23,11 +23,15 @@ func _get_singleton(service, path:String):
 
 var state = null :
 	get:
-		return _get_singleton(state, "res://addons/GameBackend/services/state.gd")
+		if !state:
+			state = _get_singleton(state, "res://addons/GameBackend/services/state.gd")
+		return state
 		
 var logs:LoggotLogger = null :
 	get:
-		if logs == null:
+		if !logs:
+			if _logger == null:
+				_ready()
 			logs = _logger.get_logger()
 			# пресет логера для отладки - собираем более широкую воронку
 			if OS.is_debug_build():
@@ -42,12 +46,36 @@ var logs:LoggotLogger = null :
 		
 var resource = null :
 	get:
-		return _get_singleton(resource, "res://addons/GameBackend/services/resources.gd")
+		if !resource:
+			resource = _get_singleton(resource, "res://addons/GameBackend/services/resources.gd")
+		return resource
 		
 var scenes = null :
 	get:
-		return _get_singleton(scenes, "res://addons/GameBackend/services/scenes.gd")
+		if !scenes:
+			scenes = _get_singleton(scenes, "res://addons/GameBackend/services/scenes.gd")
+		return scenes
 		
 var sounds = null :
 	get:
-		return _get_singleton(sounds, "res://addons/GameBackend/services/sound.gd")
+		if !sounds:
+			sounds = _get_singleton(sounds, "res://addons/GameBackend/services/sound.gd")
+		return sounds
+		
+var quests = null :
+	get:
+		if !quests:
+			quests = _get_singleton(quests, "res://addons/GameBackend/services/quests.gd")
+		return quests
+		
+var interactives = null :
+	get:
+		if !interactives:
+			interactives = _get_singleton(interactives, "res://addons/GameBackend/services/interactives.gd")
+		return interactives
+		
+var globals = null :
+	get:
+		if !globals:
+			globals = _get_singleton(globals, "res://addons/GameBackend/services/globals.gd")
+		return globals

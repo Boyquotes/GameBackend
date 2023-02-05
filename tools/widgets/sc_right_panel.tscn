@@ -1,0 +1,111 @@
+[gd_scene load_steps=13 format=3 uid="uid://fckv4vfcb6q0"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/sc_right_panel.gd" id="1_50v72"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/VBC_card.gd" id="1_hnsdu"]
+[ext_resource type="Texture2D" uid="uid://bp5ham7hwluhk" path="res://addons/GameBackend/icons/PNG/White/1x/multiplayer.png" id="2_rjrmb"]
+[ext_resource type="Texture2D" uid="uid://b47544r3bydpe" path="res://addons/GameBackend/icons/PNG/White/1x/trashcanOpen.png" id="3_aaudp"]
+[ext_resource type="Texture2D" uid="uid://cnsvnra80dfhk" path="res://addons/GameBackend/icons/PNG/White/1x/plus.png" id="3_pymic"]
+[ext_resource type="PackedScene" uid="uid://36b5b1bjb4j5" path="res://addons/GameBackend/tools/blocks/base_properties.tscn" id="4_7cb32"]
+[ext_resource type="Texture2D" uid="uid://d3ulys7pnxnhg" path="res://addons/GameBackend/icons/PNG/White/1x/save.png" id="5_8qy0k"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/VBC_blocks.gd" id="5_ohvjc"]
+[ext_resource type="PackedScene" uid="uid://c3f0sd8tud6ed" path="res://addons/GameBackend/tools/fields/hbc_str.tscn" id="6_kvej2"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/IL_blocks.gd" id="10_5vbey"]
+[ext_resource type="Texture2D" uid="uid://b7sn7t0dy6t17" path="res://addons/GameBackend/icons/PNG/White/1x/cross.png" id="10_f7xtr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_goqcg"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="SC_right_panel" type="ScrollContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 20.0
+script = ExtResource("1_50v72")
+
+[node name="VBC_card" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_hnsdu")
+
+[node name="HBC_card_manage" type="HBoxContainer" parent="VBC_card"]
+layout_mode = 2
+
+[node name="TB_add_block" type="TextureButton" parent="VBC_card/HBC_card_manage"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+tooltip_text = "Add block from list"
+texture_normal = ExtResource("3_pymic")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="TB_card_clone" type="TextureButton" parent="VBC_card/HBC_card_manage"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture_normal = ExtResource("2_rjrmb")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="TB_card_remove" type="TextureButton" parent="VBC_card/HBC_card_manage"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture_normal = ExtResource("3_aaudp")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="TB_card_save" type="TextureButton" parent="VBC_card/HBC_card_manage"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+tooltip_text = "Save file to disk"
+texture_normal = ExtResource("5_8qy0k")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="L_state" type="Label" parent="VBC_card/HBC_card_manage"]
+layout_mode = 2
+text = "State..."
+
+[node name="HBC_ID" parent="VBC_card" instance=ExtResource("6_kvej2")]
+layout_mode = 2
+title = "Interactive ID"
+
+[node name="base_properties" parent="VBC_card" instance=ExtResource("4_7cb32")]
+layout_mode = 2
+
+[node name="VBC_blocks" type="VBoxContainer" parent="VBC_card"]
+layout_mode = 2
+script = ExtResource("5_ohvjc")
+
+[node name="IL_blocks" type="ItemList" parent="."]
+visible = false
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_goqcg")
+item_count = 2
+item_0/text = "sound_links"
+item_1/text = "base_properties"
+script = ExtResource("10_5vbey")
+
+[node name="TB_close" type="TextureButton" parent="IL_blocks"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -41.0
+offset_bottom = 41.0
+grow_horizontal = 0
+texture_normal = ExtResource("10_f7xtr")
+ignore_texture_size = true
+stretch_mode = 4
+
+[connection signal="send_change_id" from="VBC_card" to="." method="_on_vbc_card_send_change_id"]
+[connection signal="pressed" from="VBC_card/HBC_card_manage/TB_add_block" to="IL_blocks" method="_on_tb_add_block_pressed"]
+[connection signal="pressed" from="VBC_card/HBC_card_manage/TB_card_save" to="VBC_card" method="_on_tb_card_save_pressed"]
+[connection signal="item_activated" from="IL_blocks" to="IL_blocks" method="_on_item_activated"]
+[connection signal="send_add_block" from="IL_blocks" to="VBC_card/VBC_blocks" method="_on_il_blocks_send_add_block"]
+[connection signal="pressed" from="IL_blocks/TB_close" to="IL_blocks" method="_on_tb_close_pressed"]

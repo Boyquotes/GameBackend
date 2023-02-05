@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cajhayoe67wfx"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/VBC_static_fields.gd" id="1_rvjn2"]
+
+[node name="VBC_static_fields" type="VBoxContainer"]
+script = ExtResource("1_rvjn2")

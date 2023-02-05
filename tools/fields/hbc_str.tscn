@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3f0sd8tud6ed"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/fields/hbc_str.gd" id="1_1ne4q"]
+
+[node name="HBC_str" type="HBoxContainer"]
+anchors_preset = -1
+anchor_right = 0.236
+anchor_bottom = 0.048
+offset_right = -271.872
+offset_bottom = -31.104
+theme_override_constants/separation = 5
+script = ExtResource("1_1ne4q")
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "anc_interactive_id"
+clip_text = true
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 20.0
+placeholder_text = "default_id"
+
+[connection signal="text_submitted" from="LineEdit" to="." method="_on_line_edit_text_submitted"]

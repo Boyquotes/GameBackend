@@ -9,7 +9,7 @@ const CUR_ZIP_PATH = "user://states/zip_archive/%s_state.zip"
 var _user_data = {}
 var _timer:Timer = null
 var _is_data_changed = false
-@onready var logs:LoggotLogger = Services.logs
+@onready var _logs:LoggotLogger = Services.logs
 
 var _guard : Mutex
 var _semaphore : Semaphore
@@ -31,8 +31,8 @@ func write_zip_file():
 	return OK
 
 func _ready():
-	assert(logs)
-	logs.info("State service > started.")
+	assert(_logs)
+	_logs.info("State service > started.")
 	_timer = Timer.new()
 	_timer.timeout.connect(_on_timer_timeout)
 	_timer.wait_time = _save_timeout_sec
@@ -46,7 +46,7 @@ func _ready():
 	_thread.start(Callable(self,"_thread_process"))
 	
 func _exit_tree():
-	logs.info("State service > Exit tree")
+	_logs.info("State service > Exit tree")
 	save_data()
 	_guard.lock()
 	_exit_thread = true
@@ -55,7 +55,7 @@ func _exit_tree():
 	_thread.wait_to_finish()
 
 func _on_timer_timeout():
-	logs.debug("State service > Timer timeout")
+	_logs.debug("State service > Timer timeout")
 	save_data()
 	
 func _get_dict_from_json_file(path:String, pwd:String)->Dictionary:
@@ -65,26 +65,26 @@ func _get_dict_from_json_file(path:String, pwd:String)->Dictionary:
 			var json = JSON.new()
 			var state = json.parse(file.get_as_text(true))
 			if state == OK:
-				logs.info("State service > Loaded " + path)
+				_logs.info("State service > Loaded " + path)
 				return json.data
 			else:
 				var message = "State service > JSON Parse Error:{0} at line {1}, {2}".format([json.get_error_message(), json.get_error_line(), path])
-				logs.error(message)
+				_logs.error(message)
 				OS.alert(message)
 		else:
 			var message = "State service > File error(load):{0}, {1}".format([Helper.error_str[FileAccess.get_open_error()], path])
-			logs.error(message)
+			_logs.error(message)
 			OS.alert(message)
 	else:
-		logs.info("State service > File not exists " + path)
+		_logs.info("State service > File not exists " + path)
 	return {}
 
 func _load_data():
-	logs.info("State service > Loading...")
+	_logs.info("State service > Loading...")
 	_user_data = _get_dict_from_json_file(CUR_STATES_PATH, _pwd)
 
 func save_data():
-	logs.debug("State service > Saving...")
+	_logs.debug("State service > Saving...")
 	if _is_data_changed:
 		_semaphore.post()
 		_is_data_changed = false
@@ -121,5 +121,5 @@ func _thread_process():
 				file.store_line(JSON.stringify(saved_data))
 			else:
 				var message = "State service > File error(save):{0}, {1}".format([Helper.error_str[FileAccess.get_open_error()], CUR_STATES_PATH])
-				logs.error(message)
+				_logs.error(message)
 				OS.alert(message)

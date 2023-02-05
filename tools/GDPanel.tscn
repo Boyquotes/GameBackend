@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3 uid="uid://yac6p67f8r4y"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/HBC_main.gd" id="1_xd4ju"]
+[ext_resource type="PackedScene" uid="uid://dufm8a85rxsq3" path="res://addons/GameBackend/tools/widgets/vbc_left_panel.tscn" id="2_ltgxh"]
+[ext_resource type="PackedScene" uid="uid://fckv4vfcb6q0" path="res://addons/GameBackend/tools/widgets/sc_right_panel.tscn" id="3_uqe1e"]
+
+[node name="TabContainer" type="TabContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Interactives" type="TabBar" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Interactives"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBC_main" type="HBoxContainer" parent="Interactives/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+script = ExtResource("1_xd4ju")
+
+[node name="VBC_left_panel" parent="Interactives/MarginContainer/HBC_main" instance=ExtResource("2_ltgxh")]
+layout_mode = 2
+
+[node name="SC_right_panel" parent="Interactives/MarginContainer/HBC_main" instance=ExtResource("3_uqe1e")]
+layout_mode = 2
+
+[connection signal="send_select_interactive_id" from="Interactives/MarginContainer/HBC_main/VBC_left_panel" to="Interactives/MarginContainer/HBC_main" method="_on_vbc_left_panel_send_select_interactive_id"]
+[connection signal="send_change_id" from="Interactives/MarginContainer/HBC_main/SC_right_panel" to="Interactives/MarginContainer/HBC_main" method="_on_sc_right_panel_send_change_id"]

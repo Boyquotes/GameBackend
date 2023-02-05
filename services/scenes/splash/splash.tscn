@@ -1,11 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://c2gpyxhrx2x5s"]
+[gd_scene load_steps=7 format=3 uid="uid://b44re2ehvh3a"]
 
 [ext_resource type="Script" path="res://addons/GameBackend/services/scenes/splash/splash.gd" id="1_5by1g"]
 [ext_resource type="Texture2D" uid="uid://c3on55fx1h8uq" path="res://addons/GameBackend/services/scenes/splash/temp_backend_texture.png" id="1_b1h4o"]
 [ext_resource type="Texture2D" uid="uid://cwneds0x44mno" path="res://addons/GameBackend/services/scenes/splash/temp_game_name_texture.png" id="2_iqwt3"]
 [ext_resource type="Texture2D" uid="uid://glex1844a0ei" path="res://addons/GameBackend/services/scenes/splash/ik2.png" id="3_8jskx"]
 [ext_resource type="Texture2D" uid="uid://dsltff6m2an0t" path="res://addons/GameBackend/services/scenes/splash/go_to_ik.png" id="5_144en"]
-[ext_resource type="PackedScene" uid="uid://xb0qk2xvvc5j" path="res://addons/GameBackend/common_scenes/tpb_start_progress.tscn" id="6_lb32k"]
+[ext_resource type="PackedScene" path="res://addons/GameBackend/scenes/tpb_start_progress.tscn" id="6_lb32k"]
 
 [node name="Splash" type="Control"]
 layout_mode = 3
@@ -18,7 +18,7 @@ script = ExtResource("1_5by1g")
 default_scene_path = "res://main.tscn"
 
 [node name="TR_Background_tex" type="TextureRect" parent="."]
-anchors_preset = 15
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -29,7 +29,7 @@ stretch_mode = 6
 [node name="TR_Game_name_tex" type="TextureRect" parent="."]
 clip_contents = true
 custom_minimum_size = Vector2(300, 150)
-anchors_preset = 8
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -43,12 +43,11 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("2_iqwt3")
-ignore_texture_size = true
 stretch_mode = 5
 
 [node name="TR_Studio_logo_tex" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(50, 50)
-anchors_preset = -1
+layout_mode = 0
 anchor_right = 0.148
 anchor_bottom = 0.235
 offset_right = 0.503998
@@ -56,11 +55,10 @@ offset_bottom = -0.280014
 size_flags_horizontal = 0
 size_flags_vertical = 0
 texture = ExtResource("3_8jskx")
-ignore_texture_size = true
 stretch_mode = 5
 
 [node name="TextureRect" type="TextureRect" parent="TR_Studio_logo_tex"]
-anchors_preset = -1
+layout_mode = 0
 anchor_top = 0.934474
 anchor_right = 1.047
 anchor_bottom = 1.22347
@@ -70,9 +68,20 @@ offset_bottom = 0.0319977
 grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("5_144en")
-ignore_texture_size = true
 metadata/_edit_use_anchors_ = true
 
 [node name="TPB_start_progress" parent="." instance=ExtResource("6_lb32k")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1.0
+offset_bottom = 30.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [connection signal="gui_input" from="TR_Studio_logo_tex" to="." method="_on_tr_studio_logo_tex_gui_input"]
