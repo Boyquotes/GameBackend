@@ -1,3 +1,4 @@
+@tool
 class_name Helper
 
 enum {
@@ -136,3 +137,9 @@ static func load_dict_from_json_file(path:String, pwd:String = "")->Dictionary:
 
 	return {}
 
+static func make_dir(path:String):
+	if !DirAccess.dir_exists_absolute(path):
+		DirAccess.make_dir_recursive_absolute(path)
+		
+static func remove_file(path:String):
+	DirAccess.remove_absolute(path)

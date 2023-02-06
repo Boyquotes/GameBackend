@@ -48,5 +48,5 @@ texture_normal = ExtResource("2_d67kw")
 ignore_texture_size = true
 stretch_mode = 4
 
-[connection signal="text_submitted" from="LE_path" to="." method="_on_le_path_text_submitted"]
+[connection signal="text_changed" from="LE_path" to="." method="_on_le_path_text_changed"]
 [connection signal="pressed" from="TB_close" to="." method="_on_tb_close_pressed"]

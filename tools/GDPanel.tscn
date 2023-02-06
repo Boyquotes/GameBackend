@@ -42,4 +42,4 @@ layout_mode = 2
 layout_mode = 2
 
 [connection signal="send_select_interactive_id" from="Interactives/MarginContainer/HBC_main/VBC_left_panel" to="Interactives/MarginContainer/HBC_main" method="_on_vbc_left_panel_send_select_interactive_id"]
-[connection signal="send_change_id" from="Interactives/MarginContainer/HBC_main/SC_right_panel" to="Interactives/MarginContainer/HBC_main" method="_on_sc_right_panel_send_change_id"]
+[connection signal="send_update" from="Interactives/MarginContainer/HBC_main/SC_right_panel" to="Interactives/MarginContainer/HBC_main" method="_on_sc_right_panel_send_update"]

@@ -1,52 +1,97 @@
+# Карточка свойств интерактива
 @tool
 extends VBoxContainer
 
-var _resource:Resources = Services.resource
+@onready var _resource:Resources = Services.resource
+@onready var _globals:Globals = Services.globals
 
-const _json_ext = ".json"
-const _interactives_dir_path = "user://gdpanel/interactives"
+# Идентификатор которые передали из левого списка для отображения.
 var interactive_id:String
-		
-signal send_change_id(id:String)
+# При клонировании карточки добавляем к идентификатору суффикс.
+const _clone_suffix = "_clone"
+@onready var ID_node = $MC_ID/HBC_ID
+
+# При создании нового интерактива через клонирование или изменение идентификатора
+#  просим левый список обновиться.
+signal send_update()
 
 func _ready():
 	assert(_resource)
-	if !DirAccess.dir_exists_absolute(_interactives_dir_path):
-		DirAccess.make_dir_recursive_absolute(_interactives_dir_path)
+	assert(_globals)
+	# Создадим директорию для интерактивов если ее раньше не было.
+	Helper.make_dir(_resource.get_interactive_path())
 	
 func serialize(id:String):
 	var dict:Dictionary
 	dict[$VBC_blocks.section_name()] = $VBC_blocks.serialize()
 	dict[$base_properties.section_name()] = $base_properties.serialize()
-	Helper.save_dict_to_json_file(_interactives_dir_path + "/" + id + _json_ext, dict)
+	Helper.save_dict_to_json_file(_resource.get_interactive_file_path(id), dict)
 	
 func deserialize(id:String):
-	var dict = Helper.load_dict_from_json_file(_interactives_dir_path + "/" + id + _json_ext)
+	var dict = Helper.load_dict_from_json_file(_resource.get_interactive_file_path(id))
 	if !dict.is_empty() && dict.has($VBC_blocks.section_name()):
 		$VBC_blocks.deserialize(dict[$VBC_blocks.section_name()])
 	if !dict.is_empty() && dict.has($base_properties.section_name()):
 		$base_properties.deserialize(dict[$base_properties.section_name()])
 
+# Из левого списка попросили отобразить карточку интерактива.
 func show_id(id:String):
 	clean()
+	# если передали пустое имя - значит просто очищаем карточку.
+	if id.is_empty():
+		if !ID_node.value.is_empty():
+			_on_tb_card_save_pressed()
+		visible = false
+		return
 	visible = true
+	# Последнее имя идентификатора
 	interactive_id = id
-	$HBC_ID.value = id
+	# Текущее или новое имя
+	ID_node.value = id
+	# Идентификатор который редактируем (можно посмотреть из поля).
+	_globals.edited_id = id
 	deserialize(id)
 	
 func _on_tb_card_save_pressed():
-	if interactive_id.is_empty() || $HBC_ID.value.is_empty():
+	# Флаг изменения имени интерактива.
+	var is_update_list = false
+	if interactive_id.is_empty() || ID_node.value.is_empty():
 		OS.alert(tr("anc_id_name_error"))
-		$HBC_card_manage/L_state.text = tr("anc_id_name_error") + " "+ $HBC_ID.value
+		editor_interactive_state(tr("anc_id_name_error") + " "+ ID_node.value)
 		return
-	if interactive_id != $HBC_ID.value:
-		DirAccess.remove_absolute(_resource.get_interactives_file_path(interactive_id))
-		emit_signal("send_change_id", $HBC_ID.value)
-	serialize($HBC_ID.value)
-	interactive_id = $HBC_ID.value
-	$HBC_card_manage/L_state.text = tr("anc_saved_to_file") + _resource.get_interactives_file_path(interactive_id)
+	# Изменилось имя интерактива.
+	if interactive_id != ID_node.value:
+		# Удалить старый файл с конфигурацией(у него сторое имя).
+		Helper.remove_file(_resource.get_interactive_file_path(interactive_id))
+		interactive_id = ID_node.value
+		_globals.edited_id = ID_node.value
+		is_update_list = true
+	serialize(interactive_id)
+	if is_update_list:
+		emit_signal("send_update")
+	editor_interactive_state(tr("anc_saved_to_file") + _resource.get_interactive_file_path(interactive_id))
 
 func clean():
-	$HBC_ID.clean()
+	ID_node.clean()
 	$base_properties.clean()
 	$VBC_blocks.clean()
+
+func _on_tb_card_clone_pressed():
+	# Проверяем, что имя интерактива не дублируется.
+	var id_list = Helper.find_all_files_array(_resource.get_interactive_path(), _resource.get_interactive_extension())
+	if ID_node.value + _clone_suffix in id_list:
+		OS.alert(tr("anc_error_id_name_exist").format([ID_node.value + _clone_suffix]))
+		editor_interactive_state(tr("anc_error_id_name_exist").format([ID_node.value + _clone_suffix]))
+		return
+	# Не нужно удалять старый файл, только создать новый
+	if interactive_id != ID_node.value:
+		interactive_id = ID_node.value
+	else:
+		interactive_id = interactive_id + _clone_suffix
+		ID_node.value = interactive_id
+	_on_tb_card_save_pressed()
+	emit_signal("send_update")
+	
+func editor_interactive_state(state:String):
+	$HBC_card_manage/L_state.text = state
+		

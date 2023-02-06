@@ -1,9 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://fckv4vfcb6q0"]
+[gd_scene load_steps=12 format=3 uid="uid://fckv4vfcb6q0"]
 
 [ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/sc_right_panel.gd" id="1_50v72"]
 [ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/VBC_card.gd" id="1_hnsdu"]
 [ext_resource type="Texture2D" uid="uid://bp5ham7hwluhk" path="res://addons/GameBackend/icons/PNG/White/1x/multiplayer.png" id="2_rjrmb"]
-[ext_resource type="Texture2D" uid="uid://b47544r3bydpe" path="res://addons/GameBackend/icons/PNG/White/1x/trashcanOpen.png" id="3_aaudp"]
 [ext_resource type="Texture2D" uid="uid://cnsvnra80dfhk" path="res://addons/GameBackend/icons/PNG/White/1x/plus.png" id="3_pymic"]
 [ext_resource type="PackedScene" uid="uid://36b5b1bjb4j5" path="res://addons/GameBackend/tools/blocks/base_properties.tscn" id="4_7cb32"]
 [ext_resource type="Texture2D" uid="uid://d3ulys7pnxnhg" path="res://addons/GameBackend/icons/PNG/White/1x/save.png" id="5_8qy0k"]
@@ -25,7 +24,7 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 20.0
 script = ExtResource("1_50v72")
 
-[node name="VBC_card" type="VBoxContainer" parent="."]
+[node name="VBC_card" type="VBoxContainer" parent="." groups=["editor_interactive_state"]]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -45,21 +44,15 @@ stretch_mode = 4
 [node name="TB_card_clone" type="TextureButton" parent="VBC_card/HBC_card_manage"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
+tooltip_text = "Clone current card"
 texture_normal = ExtResource("2_rjrmb")
-ignore_texture_size = true
-stretch_mode = 4
-
-[node name="TB_card_remove" type="TextureButton" parent="VBC_card/HBC_card_manage"]
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-texture_normal = ExtResource("3_aaudp")
 ignore_texture_size = true
 stretch_mode = 4
 
 [node name="TB_card_save" type="TextureButton" parent="VBC_card/HBC_card_manage"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
-tooltip_text = "Save file to disk"
+tooltip_text = "Save card to disk"
 texture_normal = ExtResource("5_8qy0k")
 ignore_texture_size = true
 stretch_mode = 4
@@ -68,7 +61,13 @@ stretch_mode = 4
 layout_mode = 2
 text = "State..."
 
-[node name="HBC_ID" parent="VBC_card" instance=ExtResource("6_kvej2")]
+[node name="MC_ID" type="MarginContainer" parent="VBC_card"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="HBC_ID" parent="VBC_card/MC_ID" instance=ExtResource("6_kvej2")]
 layout_mode = 2
 title = "Interactive ID"
 
@@ -103,8 +102,9 @@ texture_normal = ExtResource("10_f7xtr")
 ignore_texture_size = true
 stretch_mode = 4
 
-[connection signal="send_change_id" from="VBC_card" to="." method="_on_vbc_card_send_change_id"]
+[connection signal="send_update" from="VBC_card" to="." method="_on_vbc_card_send_update"]
 [connection signal="pressed" from="VBC_card/HBC_card_manage/TB_add_block" to="IL_blocks" method="_on_tb_add_block_pressed"]
+[connection signal="pressed" from="VBC_card/HBC_card_manage/TB_card_clone" to="VBC_card" method="_on_tb_card_clone_pressed"]
 [connection signal="pressed" from="VBC_card/HBC_card_manage/TB_card_save" to="VBC_card" method="_on_tb_card_save_pressed"]
 [connection signal="item_activated" from="IL_blocks" to="IL_blocks" method="_on_item_activated"]
 [connection signal="send_add_block" from="IL_blocks" to="VBC_card/VBC_blocks" method="_on_il_blocks_send_add_block"]

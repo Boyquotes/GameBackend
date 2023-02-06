@@ -1,3 +1,4 @@
+# Список с динамически добавляемыми полями.
 @tool
 extends VBoxContainer
 

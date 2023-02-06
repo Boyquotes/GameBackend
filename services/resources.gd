@@ -1,3 +1,4 @@
+@tool
 extends Node
 
 class_name Resources
@@ -10,6 +11,7 @@ var _logs:LoggotLogger = Services.logs
 const _timer_timeout = 0.5
 var progress:Array[float]
 
+# Путь к файлам конфигурации интерактивов
 const _interactives_dir_path = "user://gdpanel/interactives"
 const _interactive_extension = "json"
 
@@ -62,11 +64,12 @@ func _on_timer_timeout():
 		_logs.info("Resource service > timer was stopped")
 		_timer.stop()
 
-func get_interactives_path()->String:
+func get_interactive_path()->String:
 	return _interactives_dir_path
 	
 func get_interactive_extension()->String:
 	return _interactive_extension
 	
+# Абсолютный путь к файлу конфигурации по имени идентификатора интерактива
 func get_interactive_file_path(id:String)->String:
 	return  "{0}/{1}.{2}".format([_interactives_dir_path, id, _interactive_extension])
