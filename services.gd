@@ -68,12 +68,6 @@ var quests = null :
 			quests = _get_singleton(quests, "res://addons/GameBackend/services/quests.gd")
 		return quests
 		
-var interactives = null :
-	get:
-		if !interactives:
-			interactives = _get_singleton(interactives, "res://addons/GameBackend/services/interactives.gd")
-		return interactives
-		
 var globals = null :
 	get:
 		if !globals:

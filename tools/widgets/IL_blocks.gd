@@ -3,10 +3,7 @@
 @tool
 extends ItemList
 
-const _ext = "tscn"
-const _dir_path = "res://addons/GameBackend/tools/blocks"
-
-@onready var blocks_dict = Helper.find_all_files_dict(_dir_path, _ext)
+@onready var blocks_dict = Resources.find_all_blocks_dict()
 
 signal send_add_block(block:String)
 

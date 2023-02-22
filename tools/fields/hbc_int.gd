@@ -16,7 +16,7 @@ extends HBoxContainer
 			$LineEdit.text = str(value)
 
 func section_name()->String:
-	return title
+	return title.to_snake_case()
 	
 func serialize()->Dictionary:
 	return {$Label.text.to_snake_case():$LineEdit.text}

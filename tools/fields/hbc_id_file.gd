@@ -3,16 +3,14 @@
 @tool
 extends HBoxContainer
 
-@onready var _resource:Resources = Services.resource
 @onready var _globals:Globals = Services.globals
 
 
 func _ready():
-	assert(_resource)
 	assert(_globals)
 	# Редактируется идентификатор и он установлен в глобальные переменные для запрета выбора себя
 	if !_globals.edited_id.is_empty():
-		var id_list = Helper.find_all_files_array(_resource.get_interactive_path(), _resource.get_interactive_extension())
+		var id_list = Resources.find_all_interactives_array()
 		for item in id_list:
 			if item != _globals.edited_id:
 				$OB_id.add_item(item)

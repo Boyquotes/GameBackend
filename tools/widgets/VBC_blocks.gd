@@ -2,24 +2,25 @@
 @tool
 extends VBoxContainer
 
-const _ext = "tscn"
-const _dir_path = "res://addons/GameBackend/tools/blocks"
 const _blocks_name = "blocks"
-@onready var blocks_dict = Helper.find_all_files_dict(_dir_path, _ext)
+var blocks_dict:Dictionary
 # Список ранее добавленных блоков
 var created_blocks:PackedStringArray
 
+func _ready():
+	blocks_dict = Resources.find_all_blocks_dict()
+
 func _create_block(name:String)->Object:
 	if name in created_blocks:
-		get_tree().call_group("editor_interactive_state", "editor_interactive_state", tr("anc_error_blocks_repeated").format([name]))
-		OS.alert(tr("anc_error_blocks_repeated").format([name]))
+		get_tree().call_group("editor_interactive_state", "editor_interactive_state", "Blocks should not be repeated {0}".format([name]))
+		OS.alert("Blocks should not be repeated {0}".format([name]))
 		return null
 	var add_block = load(blocks_dict[name]).instantiate()
 	if add_block:
 		add_child(add_block)
 		created_blocks.append(name)
 	else:
-		OS.alert(tr("anc_error_block_no_find"))
+		OS.alert("Block {0} not find".format([name]))
 	return add_block
 
 
@@ -33,6 +34,7 @@ func serialize()->Dictionary:
 	return dict
 	
 func deserialize(dict:Dictionary):
+	created_blocks.clear()
 	for block in dict:
 		var child = _create_block(block)
 		if child:

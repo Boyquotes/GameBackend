@@ -25,6 +25,7 @@ size_flags_stretch_ratio = 20.0
 script = ExtResource("1_50v72")
 
 [node name="VBC_card" type="VBoxContainer" parent="." groups=["editor_interactive_state"]]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

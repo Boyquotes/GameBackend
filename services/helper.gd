@@ -60,7 +60,6 @@ const error_str = {
 	ERR_PRINTER_ON_FIRE: "Printer on fire error. (This is an easter egg, no engine methods return this error code.)"
 } 
 
-
 static func format_timestamp_to_str(time, format = FORMAT_DEFAULT, digit_format = "%02d")->String:
 	var digits = []
 
@@ -84,62 +83,3 @@ static func format_timestamp_to_str(time, format = FORMAT_DEFAULT, digit_format 
 		if idx != digits.size() - 1:
 			formatted += colon
 	return formatted
-
-static func find_all_files_recursive(find_dir:String, extension:String, paths:Dictionary):
-	var dir = DirAccess.open(find_dir)
-	if dir:
-		dir.list_dir_begin()
-		while true:
-			var next_item = dir.get_next().replace(".import", "")
-			if next_item.is_empty():
-				break
-			if dir.current_is_dir() && next_item != "." && next_item != "..":
-				find_all_files_recursive(dir.get_current_dir() + "/" + next_item + "/", extension, paths)
-			elif next_item.get_extension() == extension:
-				if paths.has(next_item.get_basename()):
-					print("Error. Duplicate resources " + next_item)
-				paths[next_item.get_basename()] = dir.get_current_dir() + "/" + next_item
-				print("Add path to resource - ", next_item.get_basename())
-		dir.list_dir_end()
-	else:
-		print("An error occurred when trying to access the path " + find_dir)
-		
-static func find_all_files_dict(start_dir:String, extension:String)->Dictionary:
-	var result:Dictionary
-	find_all_files_recursive(start_dir, extension, result)
-	return result
-	
-static func find_all_files_array(start_dir:String, extension:String)->Array:
-	return find_all_files_dict(start_dir, extension).keys()
-	
-static func save_dict_to_json_file(path:String, dict:Dictionary, pwd:String = ""):
-	var file = FileAccess.open_encrypted_with_pass(path, FileAccess.WRITE, pwd) if !OS.is_debug_build() else FileAccess.open(path, FileAccess.WRITE)
-	if file:
-		file.store_line(JSON.stringify(dict))
-	else:
-		var message = "State service > File error(save):{0}, {1}".format([Helper.error_str[FileAccess.get_open_error()], path])
-		OS.alert(message)
-		
-static func load_dict_from_json_file(path:String, pwd:String = "")->Dictionary:
-	if FileAccess.file_exists(path):
-		var file = FileAccess.open_encrypted_with_pass(path, FileAccess.READ, pwd) if !OS.is_debug_build() else FileAccess.open(path, FileAccess.READ)
-		if file:
-			var json = JSON.new()
-			var state = json.parse(file.get_as_text(true))
-			if state == OK:
-				return json.data
-			else:
-				var message = "State service > JSON Parse Error:{0} at line {1}, {2}".format([json.get_error_message(), json.get_error_line(), path])
-				OS.alert(message)
-		else:
-			var message = "State service > File error(load):{0}, {1}".format([Helper.error_str[FileAccess.get_open_error()], path])
-			OS.alert(message)
-
-	return {}
-
-static func make_dir(path:String):
-	if !DirAccess.dir_exists_absolute(path):
-		DirAccess.make_dir_recursive_absolute(path)
-		
-static func remove_file(path:String):
-	DirAccess.remove_absolute(path)

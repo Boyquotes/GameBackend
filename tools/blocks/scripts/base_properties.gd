@@ -1,3 +1,5 @@
+# Обработчик базовых/обязательных данных
+
 extends BaseBlock
 
 class_name HitpointBlock
@@ -5,12 +7,13 @@ class_name HitpointBlock
 
 # Значения целочисленного поля:
 # -1  - не учитывать в расчётах
-# 0   - ошибка или значение не указано
+# 0   - ошибка или значение не указано/интерактив закрыт
 # >0  - корректное значение
 var damage = -1
 var hitpoints = -1:
 	set(value):
 		hitpoints = value
+		# Если хитпоинты закончились сообщаем об этом интерактиву
 		if value == 0:
 			var parent = get_parent()
 			if parent && parent.has_method(_interact_handler_method):
@@ -18,6 +21,7 @@ var hitpoints = -1:
 			else:
 				_error_block_notify(_interact_handler_method)
 
+# Имена секций и полей интерактива из конфигурации
 const _name_damage = "damage"
 const _name_hitpoints = "hitpoints"
 const _static_fields = "static_fields"
@@ -52,6 +56,7 @@ func interact(inter:Interactive):
 	if inter.interactives.has(name):
 		var opposite_block = inter.interactives[name] as HitpointBlock
 		if opposite_block:
+			# При взаимодействии интерактивов вычитаем из хитпоинтов одного дамаг другого
 			if hitpoints > 0 && opposite_block.damage > 0:
 				var result = hitpoints - opposite_block.damage
 				hitpoints = result if result > 0 else 0

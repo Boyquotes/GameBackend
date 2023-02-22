@@ -2,7 +2,6 @@
 @tool
 extends VBoxContainer
 
-@onready var _resource:Resources = Services.resource
 @onready var _globals:Globals = Services.globals
 
 # Идентификатор которые передали из левого списка для отображения.
@@ -16,27 +15,31 @@ const _clone_suffix = "_clone"
 signal send_update()
 
 func _ready():
-	assert(_resource)
 	assert(_globals)
 	# Создадим директорию для интерактивов если ее раньше не было.
-	Helper.make_dir(_resource.get_interactive_path())
+	Resources.make_interactive_dir()
 	
 func serialize(id:String):
 	var dict:Dictionary
 	dict[$VBC_blocks.section_name()] = $VBC_blocks.serialize()
 	dict[$base_properties.section_name()] = $base_properties.serialize()
-	Helper.save_dict_to_json_file(_resource.get_interactive_file_path(id), dict)
+	Resources.save_interactive_to_json_file(id, dict)
 	
 func deserialize(id:String):
-	var dict = Helper.load_dict_from_json_file(_resource.get_interactive_file_path(id))
+	var dict = Resources.load_dict_from_interactive(id)
 	if !dict.is_empty() && dict.has($VBC_blocks.section_name()):
 		$VBC_blocks.deserialize(dict[$VBC_blocks.section_name()])
 	if !dict.is_empty() && dict.has($base_properties.section_name()):
 		$base_properties.deserialize(dict[$base_properties.section_name()])
+		
+func _exit_tree():
+	if !interactive_id.is_empty():
+		_on_tb_card_save_pressed()
 
 # Из левого списка попросили отобразить карточку интерактива.
 func show_id(id:String):
-	clean()
+	if !interactive_id.is_empty():
+		clean()
 	# если передали пустое имя - значит просто очищаем карточку.
 	if id.is_empty():
 		if !ID_node.value.is_empty():
@@ -62,23 +65,24 @@ func _on_tb_card_save_pressed():
 	# Изменилось имя интерактива.
 	if interactive_id != ID_node.value:
 		# Удалить старый файл с конфигурацией(у него сторое имя).
-		Helper.remove_file(_resource.get_interactive_file_path(interactive_id))
+		Resources.remove_interactive(interactive_id)
 		interactive_id = ID_node.value
 		_globals.edited_id = ID_node.value
 		is_update_list = true
 	serialize(interactive_id)
 	if is_update_list:
 		emit_signal("send_update")
-	editor_interactive_state(tr("anc_saved_to_file") + _resource.get_interactive_file_path(interactive_id))
+	editor_interactive_state(tr("anc_saved_to_file") + Resources.get_interactive_file_path(interactive_id))
 
 func clean():
+	_on_tb_card_save_pressed()
 	ID_node.clean()
 	$base_properties.clean()
 	$VBC_blocks.clean()
 
 func _on_tb_card_clone_pressed():
 	# Проверяем, что имя интерактива не дублируется.
-	var id_list = Helper.find_all_files_array(_resource.get_interactive_path(), _resource.get_interactive_extension())
+	var id_list = Resources.find_all_interactives_array()
 	if ID_node.value + _clone_suffix in id_list:
 		OS.alert(tr("anc_error_id_name_exist").format([ID_node.value + _clone_suffix]))
 		editor_interactive_state(tr("anc_error_id_name_exist").format([ID_node.value + _clone_suffix]))
