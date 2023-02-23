@@ -49,11 +49,12 @@ func _inited(id:String)->bool:
 # Произошло столкновение родительской сцены с другой
 func interact(body:Node):
 	# Проверяем есть ли у второго узла интерактив
-	var interactive_opposite = body.get_node(_name_interactive) as Interactive
-	if interactive_opposite:
-		# В свои блоки передаём интерактив второй сцены с которой произойдёт обработка данных
-		for block_name in interactives:
-			interactives[block_name].interact(interactive_opposite)
+	if body.has_node(_name_interactive):
+		var interactive_opposite = body.get_node(_name_interactive) as Interactive
+		if interactive_opposite:
+			# В свои блоки передаём интерактив второй сцены с которой произойдёт обработка данных
+			for block_name in interactives:
+				interactives[block_name].interact(interactive_opposite)
 
 # Парсим словарь блока
 func _pars_block_dict(dict:Dictionary, block_name:String)->bool:

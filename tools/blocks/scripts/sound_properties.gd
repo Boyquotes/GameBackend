@@ -27,6 +27,7 @@ func pars_dict(dict:Dictionary)->bool:
 	
 func interact(inter:Interactive):
 	# У себя в списке проверяем есть ли звук для другого интерактива
-	var sound_path = _sound_links[inter._id] as String
-	if !sound_path.is_empty():
-		_sounds.play(sound_path)
+	if inter && _sound_links.has(inter._id):
+		var sound_path = _sound_links[inter._id] as String
+		if !sound_path.is_empty():
+			_sounds.play(sound_path)
