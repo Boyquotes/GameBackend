@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dchy7pmj45ulb"]
+
+[ext_resource type="Texture2D" uid="uid://cjjonr7b8nb3a" path="res://addons/GameBackend/icons/colours/heart.png" id="1_augab"]
+
+[node name="TR_hart" type="TextureRect"]
+custom_minimum_size = Vector2(30, 30)
+texture = ExtResource("1_augab")
+expand_mode = 1
+stretch_mode = 4

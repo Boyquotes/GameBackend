@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://bsk4nkqtuox41"]
+
+[ext_resource type="Texture2D" uid="uid://52ohlm3vkxp5" path="res://addons/GameBackend/textures/progress/lifebar_bg.png" id="1_kt7ie"]
+[ext_resource type="Texture2D" uid="uid://b70pnr3vfik1c" path="res://addons/GameBackend/textures/progress/green_bar_fill.png" id="2_7h6nw"]
+[ext_resource type="Texture2D" uid="uid://cjjonr7b8nb3a" path="res://addons/GameBackend/icons/colours/heart.png" id="3_ruamb"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_phv5v"]
+font_size = 36
+
+[sub_resource type="LabelSettings" id="LabelSettings_nt43u"]
+font_size = 12
+
+[node name="TPB_hitpoints_lifes" type="TextureProgressBar"]
+custom_minimum_size = Vector2(150, 20)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+value = 40.0
+rounded = true
+nine_patch_stretch = true
+texture_under = ExtResource("1_kt7ie")
+texture_progress = ExtResource("2_7h6nw")
+
+[node name="S2D_hart" type="Sprite2D" parent="."]
+position = Vector2(154, 10)
+scale = Vector2(0.354167, 0.34375)
+texture = ExtResource("3_ruamb")
+
+[node name="L_lifes" type="Label" parent="S2D_hart"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -41.0
+offset_right = -54.0
+offset_bottom = -61.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "1"
+label_settings = SubResource("LabelSettings_phv5v")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L_hitpoints" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.15
+offset_top = -2.0
+text = "40"
+label_settings = SubResource("LabelSettings_nt43u")
+horizontal_alignment = 1
+vertical_alignment = 1

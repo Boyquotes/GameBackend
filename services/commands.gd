@@ -17,7 +17,7 @@
 @tool
 extends Node
 
-class_name CommandService
+class_name Commands
 
 var _commands = []
 var _current_index = 0
@@ -26,13 +26,17 @@ const _max_commands = 50
 enum {NEXT, PREV, ADD}
 var state = ADD
 
+func subscribe():
+	pass
+
 func _ready():
-	print("Command service start")
+	#print("Command service start")
 	# устанавливаем фиксированный размер массива 
 	_commands.resize(_max_commands)
 	
 func _exit_tree():
-	print("Command service stop")
+	#print("Command service stop")
+	pass
 
 func add(command):
 	_commands[_current_index] = command

@@ -3,14 +3,14 @@
 @tool
 extends ItemList
 
-@onready var blocks_dict = Resources.find_all_blocks_dict()
+@onready var _resources:Resources = Services.resource
 
 signal send_add_block(block:String)
 
 
 func _ready():
 	clear()
-	var blocks = blocks_dict.keys()
+	var blocks = _resources.find_all_blocks_dict().keys()
 	for name in blocks:
 		add_item(name)
 

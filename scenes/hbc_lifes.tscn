@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cfw76ci8b6wxh"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/scenes/hbc_lifes.gd" id="1_y3lfi"]
+
+[node name="HBC_lifes" type="HBoxContainer" groups=["HUD"]]
+script = ExtResource("1_y3lfi")

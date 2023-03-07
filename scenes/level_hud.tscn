@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbdtly3nf6wef"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/scenes/level_hud.gd" id="1_db22k"]
+[ext_resource type="PackedScene" uid="uid://cfw76ci8b6wxh" path="res://addons/GameBackend/scenes/hbc_lifes.tscn" id="2_h25bu"]
+
+[node name="MC_HUD" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+script = ExtResource("1_db22k")
+metadata/_edit_use_anchors_ = true
+
+[node name="HBC_HUD" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="VBC_lift" type="VBoxContainer" parent="HBC_HUD"]
+layout_mode = 2
+
+[node name="HBC_lifes" parent="HBC_HUD/VBC_lift" instance=ExtResource("2_h25bu")]
+layout_mode = 2
+
+[node name="VBC_center" type="VBoxContainer" parent="HBC_HUD"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 20.0
+
+[node name="VBC_right" type="VBoxContainer" parent="HBC_HUD"]
+layout_mode = 2

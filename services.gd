@@ -73,3 +73,10 @@ var globals = null :
 		if !globals:
 			globals = _get_singleton(globals, "res://addons/GameBackend/services/globals.gd")
 		return globals
+		
+var locations = null :
+	get:
+		if !locations:
+			locations = _get_singleton(locations, "res://addons/GameBackend/services/locations.gd")
+		return locations
+		

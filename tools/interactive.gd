@@ -10,6 +10,7 @@ enum {
 	}
 
 var _logs:LoggotLogger = Services.logs
+var _resources:Resources = Services.resource
 var _id:String
 
 # Названия секций в конфигурации
@@ -36,7 +37,7 @@ static func create(id:String)->Interactive:
 # Инициализация интерактива
 func _inited(id:String)->bool:
 	assert(_logs)
-	var dict = Resources.load_dict_from_interactive(id)
+	var dict = _resources.load_dict_from_interactive(id)
 	if !dict.is_empty():
 		_id = id
 		# Добавляем скрипту имя под которым оно будет чиститься у родительской сцены

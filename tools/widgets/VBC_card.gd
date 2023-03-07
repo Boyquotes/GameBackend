@@ -3,6 +3,7 @@
 extends VBoxContainer
 
 @onready var _globals:Globals = Services.globals
+@onready var _resources:Resources = Services.resource
 
 # Идентификатор которые передали из левого списка для отображения.
 var interactive_id:String
@@ -17,16 +18,16 @@ signal send_update()
 func _ready():
 	assert(_globals)
 	# Создадим директорию для интерактивов если ее раньше не было.
-	Resources.make_interactive_dir()
+	_resources.make_interactive_dir()
 	
 func serialize(id:String):
 	var dict:Dictionary
 	dict[$VBC_blocks.section_name()] = $VBC_blocks.serialize()
 	dict[$base_properties.section_name()] = $base_properties.serialize()
-	Resources.save_interactive_to_json_file(id, dict)
+	_resources.save_interactive_to_json_file(id, dict)
 	
 func deserialize(id:String):
-	var dict = Resources.load_dict_from_interactive(id)
+	var dict = _resources.load_dict_from_interactive(id)
 	if !dict.is_empty() && dict.has($VBC_blocks.section_name()):
 		$VBC_blocks.deserialize(dict[$VBC_blocks.section_name()])
 	if !dict.is_empty() && dict.has($base_properties.section_name()):
@@ -65,14 +66,14 @@ func _on_tb_card_save_pressed():
 	# Изменилось имя интерактива.
 	if interactive_id != ID_node.value:
 		# Удалить старый файл с конфигурацией(у него сторое имя).
-		Resources.remove_interactive(interactive_id)
+		_resources.remove_interactive(interactive_id)
 		interactive_id = ID_node.value
 		_globals.edited_id = ID_node.value
 		is_update_list = true
 	serialize(interactive_id)
 	if is_update_list:
 		emit_signal("send_update")
-	editor_interactive_state(tr("anc_saved_to_file") + Resources.get_interactive_file_path(interactive_id))
+	editor_interactive_state(tr("anc_saved_to_file") + _resources.get_interactive_file_path(interactive_id))
 
 func clean():
 	_on_tb_card_save_pressed()
@@ -82,7 +83,7 @@ func clean():
 
 func _on_tb_card_clone_pressed():
 	# Проверяем, что имя интерактива не дублируется.
-	var id_list = Resources.find_all_interactives_array()
+	var id_list = _resources.find_all_interactives_array()
 	if ID_node.value + _clone_suffix in id_list:
 		OS.alert(tr("anc_error_id_name_exist").format([ID_node.value + _clone_suffix]))
 		editor_interactive_state(tr("anc_error_id_name_exist").format([ID_node.value + _clone_suffix]))

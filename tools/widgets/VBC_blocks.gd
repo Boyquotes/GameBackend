@@ -2,20 +2,21 @@
 @tool
 extends VBoxContainer
 
+@onready var _resources:Resources = Services.resource
+
 const _blocks_name = "blocks"
-var blocks_dict:Dictionary
 # Список ранее добавленных блоков
 var created_blocks:PackedStringArray
 
 func _ready():
-	blocks_dict = Resources.find_all_blocks_dict()
+	pass
 
 func _create_block(name:String)->Object:
 	if name in created_blocks:
 		get_tree().call_group("editor_interactive_state", "editor_interactive_state", "Blocks should not be repeated {0}".format([name]))
 		OS.alert("Blocks should not be repeated {0}".format([name]))
 		return null
-	var add_block = load(blocks_dict[name]).instantiate()
+	var add_block = load(_resources.find_all_blocks_dict()[name]).instantiate()
 	if add_block:
 		add_child(add_block)
 		created_blocks.append(name)
