@@ -8,23 +8,28 @@ extends Node
 
 class_name Locations
 
-@onready var _state:State = Services.state
-@onready var _logs:LoggotLogger = Services.logs
-@onready var _resources:Resources = Services.resource
+var _state:State = Services.state
+var _logs:LoggotLogger = Services.logs
+var _resources:Resources = Services.resource
 # Проверит не скачали ли мы в хранилище ассеты, если скачали возьмёт оттуда иначе из ресурсов
 # Это пути к папкам, папки называются именами локаций и содержат уровни
-@onready var _paths:Dictionary = _resources.find_all_dirs_locations()
+var _paths:Dictionary
+# Словарь с состоянием сервиса для сериализации
+var _state_dict:Dictionary
+
 const _state_name = "locations"
 # Секция с пройденными уровнями в локациях
 const _passed = "passed"
-# Словарь с состоянием сервиса для сериализации
-var _state_dict:Dictionary
+const _res_locations_dir_path = "res://assets/locations"
+const _user_locations_dir_path = "user://assets/locations"
+const _location_cfg = "config.json"
 
 func _ready():
 	assert(_logs)
 	assert(_state)
 	_state_dict = _state.get_dict(_state_name)
 	_logs.info("Location service > ready")
+	_paths = find_all_dirs_locations()
 	
 func _exit_tree():
 	_state.set_dict(_state_name, _state_dict)
@@ -84,5 +89,34 @@ func location_level_passed(location:String, level:String):
 	location_dict[_passed] = passed_levels
 	_state_dict[location] = location_dict
 
+func get_cfg_dict_for_location(location:String)->Dictionary:
+	var cfg_path = _paths.get(location, "") + "/" + _location_cfg
+	if FileAccess.file_exists(cfg_path):
+		return _resources.load_dict_from_json_file(cfg_path)
+	return {}
+	
+func get_location_path()->String:
+	if DirAccess.dir_exists_absolute(_user_locations_dir_path):
+		return _user_locations_dir_path
+		
+	if DirAccess.dir_exists_absolute(_res_locations_dir_path):
+		return _res_locations_dir_path
+		
+	_logs.error("Location service > path to locations directory not exist.")
+	return ""
+	
+func find_all_dirs_locations()->Dictionary:
+	var paths:Dictionary
+	_resources.find_all_dirs_recursive(get_location_path(), paths)
+	return paths
+	
+func find_all_levels_location_tscn(location_name:String)->Dictionary:
+	if _paths.has(location_name):
+		return _resources.find_all_files_dict(_paths[location_name], _resources.get_scene_extension())
+	return {}
 
+func get_locations()->Dictionary:
+	return _paths
 
+func get_location_cfg_name():
+	return _location_cfg

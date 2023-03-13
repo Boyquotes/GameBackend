@@ -83,3 +83,13 @@ static func format_timestamp_to_str(time, format = FORMAT_DEFAULT, digit_format 
 		if idx != digits.size() - 1:
 			formatted += colon
 	return formatted
+
+static func one_child_visible(child:Node):
+	if child:
+		var parent = child.get_parent() as Node
+		if parent:
+			for item in parent.get_children():
+				if item == child:
+					child.visible = true
+				else:
+					item.visible = false

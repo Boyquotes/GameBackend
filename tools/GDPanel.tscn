@@ -1,8 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://yac6p67f8r4y"]
+[gd_scene load_steps=11 format=3 uid="uid://yac6p67f8r4y"]
 
 [ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/HBC_main.gd" id="1_xd4ju"]
 [ext_resource type="PackedScene" uid="uid://dufm8a85rxsq3" path="res://addons/GameBackend/tools/widgets/vbc_left_panel.tscn" id="2_ltgxh"]
 [ext_resource type="PackedScene" uid="uid://fckv4vfcb6q0" path="res://addons/GameBackend/tools/widgets/sc_right_panel.tscn" id="3_uqe1e"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/IL_locations.gd" id="4_eepp8"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/HBC_main_loc.gd" id="4_vifxn"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/IL_levels.gd" id="6_p3hu3"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/P_properties.gd" id="7_e40n1"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/VBC_location.gd" id="8_blbp4"]
+[ext_resource type="PackedScene" uid="uid://jleuscu18c6f" path="res://addons/GameBackend/tools/fields/hbc_int.tscn" id="8_yla68"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/VBC_level.gd" id="10_5ig4x"]
 
 [node name="TabContainer" type="TabContainer"]
 anchors_preset = 15
@@ -41,5 +48,81 @@ layout_mode = 2
 [node name="SC_right_panel" parent="Interactives/MarginContainer/HBC_main" instance=ExtResource("3_uqe1e")]
 layout_mode = 2
 
+[node name="Locations" type="TabBar" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Locations"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBC_main" type="HBoxContainer" parent="Locations/MarginContainer"]
+layout_mode = 2
+script = ExtResource("4_vifxn")
+
+[node name="IL_locations" type="ItemList" parent="Locations/MarginContainer/HBC_main"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 1
+item_0/text = "main"
+script = ExtResource("4_eepp8")
+
+[node name="IL_levels" type="ItemList" parent="Locations/MarginContainer/HBC_main"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("6_p3hu3")
+
+[node name="P_properties" type="Panel" parent="Locations/MarginContainer/HBC_main"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("7_e40n1")
+
+[node name="SC_location" type="ScrollContainer" parent="Locations/MarginContainer/HBC_main/P_properties"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBC_location" type="VBoxContainer" parent="Locations/MarginContainer/HBC_main/P_properties/SC_location"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("8_blbp4")
+
+[node name="HBC_int" parent="Locations/MarginContainer/HBC_main/P_properties/SC_location/VBC_location" instance=ExtResource("8_yla68")]
+layout_mode = 2
+title = "Lives"
+value = 5
+
+[node name="SC_level" type="ScrollContainer" parent="Locations/MarginContainer/HBC_main/P_properties"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBC_level" type="VBoxContainer" parent="Locations/MarginContainer/HBC_main/P_properties/SC_level"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("10_5ig4x")
+
 [connection signal="send_select_interactive_id" from="Interactives/MarginContainer/HBC_main/VBC_left_panel" to="Interactives/MarginContainer/HBC_main" method="_on_vbc_left_panel_send_select_interactive_id"]
 [connection signal="send_update" from="Interactives/MarginContainer/HBC_main/SC_right_panel" to="Interactives/MarginContainer/HBC_main" method="_on_sc_right_panel_send_update"]
+[connection signal="item_clicked" from="Locations/MarginContainer/HBC_main/IL_locations" to="Locations/MarginContainer/HBC_main/IL_locations" method="_on_item_clicked"]
+[connection signal="send_selected_location" from="Locations/MarginContainer/HBC_main/IL_locations" to="Locations/MarginContainer/HBC_main" method="_on_il_locations_send_selected_location"]
+[connection signal="item_clicked" from="Locations/MarginContainer/HBC_main/IL_levels" to="Locations/MarginContainer/HBC_main/IL_levels" method="_on_item_clicked"]
+[connection signal="send_selected_level" from="Locations/MarginContainer/HBC_main/IL_levels" to="Locations/MarginContainer/HBC_main" method="_on_il_levels_send_selected_level"]

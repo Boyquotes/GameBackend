@@ -17,11 +17,7 @@ layout_mode = 2
 text = "Field name"
 clip_text = true
 
-[node name="LineEdit" type="LineEdit" parent="."]
+[node name="SpinBox" type="SpinBox" parent="."]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-size_flags_stretch_ratio = 20.0
-text = "0"
 
-[connection signal="text_changed" from="LineEdit" to="." method="_on_line_edit_text_changed"]
+[connection signal="value_changed" from="SpinBox" to="." method="_on_spin_box_value_changed"]
