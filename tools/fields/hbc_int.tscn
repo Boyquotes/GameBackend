@@ -10,6 +10,7 @@ offset_right = -271.872
 offset_bottom = -31.104
 theme_override_constants/separation = 5
 script = ExtResource("1_15a1f")
+value = -1
 
 [node name="Label" type="Label" parent="."]
 custom_minimum_size = Vector2(200, 0)
@@ -19,5 +20,8 @@ clip_text = true
 
 [node name="SpinBox" type="SpinBox" parent="."]
 layout_mode = 2
+min_value = -1.0
+max_value = 1e+07
+value = -1.0
 
 [connection signal="value_changed" from="SpinBox" to="." method="_on_spin_box_value_changed"]

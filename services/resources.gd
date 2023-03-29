@@ -14,13 +14,10 @@ var progress:Array[float]
 # Путь к файлам конфигурации интерактивов
 const _res_interactives_dir_path = "res://assets/interactives"
 const _user_interactives_dir_path = "user://assets/interactives"
-#const _res_locations_dir_path = "res://assets/locations"
-#const _user_locations_dir_path = "user://assets/locations"
 const _blocks_dir_path = "res://addons/GameBackend/tools/blocks"
 const _cfg_extension = "json"
 const _scene_extension = "tscn"
 const _pwd = ""
-#const _location_cfg = "config." + _cfg_extension
 
 signal send_resource_loaded(path:String, res:Resource)
 signal send_resource_progress(progress:float)
@@ -32,9 +29,6 @@ func _ready():
 	add_child(_timer)
 	_timer.wait_time = _timer_timeout
 	_timer.timeout.connect(_on_timer_timeout)
-	
-#func get_location_cfg_name():
-#	return _location_cfg
 	
 func get_resource_async(path:String) -> int:#"Error" вызывает ошибку компиляции! 
 	if !FileAccess.file_exists(path):
@@ -84,16 +78,6 @@ func get_interactive_path()->String:
 	_logs.error("Resource service > path to interactives directory not exist.")
 	return ""
 	
-#func get_location_path()->String:
-#	if DirAccess.dir_exists_absolute(_user_locations_dir_path):
-#		return _user_locations_dir_path
-#
-#	if DirAccess.dir_exists_absolute(_res_locations_dir_path):
-#		return _res_locations_dir_path
-#
-#	_logs.error("Resource service > path to locations directory not exist.")
-#	return ""
-	
 func get_blocks_path()->String:
 	return _blocks_dir_path
 	
@@ -140,11 +124,6 @@ func find_all_dirs_recursive(find_dir:String, paths:Dictionary):
 		dir.list_dir_end()
 	else:
 		_logs.error("Resource service > An error occurred when trying to access the path " + find_dir)
-
-#func find_all_dirs_locations()->Dictionary:
-#	var paths:Dictionary
-#	find_all_dirs_recursive(get_location_path(), paths)
-#	return paths
 	
 func find_all_files_dict(start_dir:String, extension:String)->Dictionary:
 	var result:Dictionary
@@ -153,12 +132,6 @@ func find_all_files_dict(start_dir:String, extension:String)->Dictionary:
 	
 func find_all_files_array(start_dir:String, extension:String)->Array:
 	return find_all_files_dict(start_dir, extension).keys()
-
-#func find_all_levels_location_tscn(location_name:String)->Dictionary:
-#	var paths_dict = find_all_dirs_locations()
-#	if paths_dict.has(location_name):
-#		return find_all_files_dict(paths_dict[location_name], get_scene_extension())
-#	return {}
 	
 func save_dict_to_json_file(path:String, dict:Dictionary):
 	var file = FileAccess.open_encrypted_with_pass(path, FileAccess.WRITE, _pwd) if !OS.is_debug_build() else FileAccess.open(path, FileAccess.WRITE)

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://jvhjvd1k83ws"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/IL_levels.gd" id="1_bktss"]
+
+[node name="IL_levels" type="ItemList"]
+size_flags_horizontal = 3
+script = ExtResource("1_bktss")
+
+[connection signal="item_clicked" from="." to="." method="_on_item_clicked"]

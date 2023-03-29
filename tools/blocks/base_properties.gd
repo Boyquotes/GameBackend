@@ -3,12 +3,13 @@
 extends MarginContainer
 
 @onready var _fields = $VBC_main/VBC_static_fields
+const _default_script = "res://addons/GameBackend/tools/blocks/scripts/base_properties.gd"
 
 const _block_name = "base_properties"
 const _block_script_name = "script" 
 var _block_handle_script:String:
 	set(_value):
-		_block_handle_script = _value
+		_block_handle_script = _default_script if _value.is_empty() else _value
 		$VBC_main/HBC_data_manage/L_script.text = _block_handle_script.get_file()
 
 func _on_tb_minimize_pressed():

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://onluh78203sy"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/IL_locations.gd" id="1_vl3b1"]
+
+[node name="IL_locations" type="ItemList"]
+size_flags_horizontal = 3
+item_count = 1
+item_0/text = "main"
+script = ExtResource("1_vl3b1")
+
+[connection signal="item_clicked" from="." to="." method="_on_item_clicked"]

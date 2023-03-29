@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3 uid="uid://dvu7weg872laa"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/P_properties.gd" id="1_xbxd1"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/VBC_location.gd" id="2_gvb0h"]
+[ext_resource type="PackedScene" uid="uid://jleuscu18c6f" path="res://addons/GameBackend/tools/fields/hbc_int.tscn" id="3_tucyk"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/VBC_level.gd" id="4_mc6j2"]
+
+[node name="P_properties" type="Panel"]
+size_flags_horizontal = 3
+script = ExtResource("1_xbxd1")
+
+[node name="SC_location" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBC_location" type="VBoxContainer" parent="SC_location"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("2_gvb0h")
+
+[node name="HBC_int" parent="SC_location/VBC_location" instance=ExtResource("3_tucyk")]
+layout_mode = 2
+title = "Lives"
+value = 5
+
+[node name="SC_level" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBC_level" type="VBoxContainer" parent="SC_level"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("4_mc6j2")

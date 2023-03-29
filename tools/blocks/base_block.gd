@@ -14,7 +14,7 @@ func pars_dict(dict:Dictionary)->bool:
 	return false
 	
 func interact(inter:Interactive):
-	_logs.error("Interactive {0} has not reimplement method -interact(inter:Interactive)-.".format([_id]))
+	_logs.error("Interactive {0} has not reimplement method - interact(inter:Interactive)-.".format([_id]))
 	
 func _error_field_notify(field_name:String):
 	_logs.error("In block {0} not exist field {1}.".format([name, field_name]))

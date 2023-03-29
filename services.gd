@@ -80,3 +80,9 @@ var locations = null :
 			locations = _get_singleton(locations, "res://addons/GameBackend/services/locations.gd")
 		return locations
 		
+var items = null :
+	get:
+		if !items:
+			items = _get_singleton(items, "res://addons/GameBackend/services/items.gd")
+		return items
+		
