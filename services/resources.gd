@@ -185,3 +185,29 @@ func find_all_blocks_dict()->Dictionary:
 
 func load_dict_from_interactive(id:String)->Dictionary:
 	return load_dict_from_json_file(get_interactive_file_path(id))
+
+func find_in_text_files(paths:PackedStringArray, find_text:String)->Array[int]:
+	var list:Array[int]
+	# Ищем в имени, если нет - то в конфигурации.
+	var index = 0
+	for path in paths:
+		if path.get_basename().to_lower().findn(find_text) > -1 || FileAccess.get_file_as_string(path).to_lower().findn(find_text) > -1:
+			list.append(index)
+		index += 1
+	return list
+
+func _change_file(old_file_path:String, new_name:String, func_pointer):
+	if FileAccess.file_exists(old_file_path):
+		var old_name = old_file_path.get_file()
+		var new_path = old_file_path.replace(old_name, new_name + "." + old_file_path.get_extension())
+		var state = func_pointer.call(old_file_path, new_path)
+		if state != OK:
+			_logs.error("Resource service > " + Helper.error_str[state])
+	else:
+		_logs.error("Resource service > file {0} not exist or access denied.".format([old_file_path]))
+
+func rename_file(old_file_path:String, new_name:String):
+	_change_file(old_file_path, new_name, Callable(DirAccess, "rename_absolute"))
+
+func copy_file(old_file_path:String, new_name:String):
+	_change_file(old_file_path, new_name, Callable(DirAccess, "copy_absolute"))	

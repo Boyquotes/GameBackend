@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjji65p3aeew5"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/common/edit panel/p_edit.gd" id="1_ufaal"]
+
+[node name="P_edit" type="Panel"]
+anchors_preset = -1
+anchor_right = 0.215
+anchor_bottom = 0.062
+offset_right = 0.319992
+offset_bottom = -0.176003
+script = ExtResource("1_ufaal")
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="text_submitted" from="LineEdit" to="." method="_on_line_edit_text_submitted"]

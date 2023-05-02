@@ -21,11 +21,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 20.0
-item_count = 4
+item_count = 5
 item_0/text = "BLUE_TILE"
-item_1/text = "BALL_FINISH"
-item_2/text = "SLIDER"
-item_3/text = "BALL"
+item_1/text = "PERIMETR"
+item_2/text = "BALL_FINISH"
+item_3/text = "SLIDER"
+item_4/text = "BALL"
 
 [node name="HBC_bottom_block" type="HBoxContainer" parent="."]
 layout_mode = 2

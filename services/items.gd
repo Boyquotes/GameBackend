@@ -77,6 +77,6 @@ func save_item_dict(item_name:String, dict:Dictionary):
 	if !path.is_empty():
 		_resources.save_dict_to_json_file(path, dict)
 	
-func get_items_list()->Array:
+func get_items_list()->PackedStringArray:
 	return _paths.keys()
 

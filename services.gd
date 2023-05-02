@@ -86,3 +86,9 @@ var items = null :
 			items = _get_singleton(items, "res://addons/GameBackend/services/items.gd")
 		return items
 		
+var collections = null :
+	get:
+		if !collections:
+			collections = _get_singleton(collections, "res://addons/GameBackend/services/collections.gd")
+		return collections
+		

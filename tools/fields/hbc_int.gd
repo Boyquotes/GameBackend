@@ -12,8 +12,10 @@ extends HBoxContainer
 @export var value:int = 0:
 	set(_value):
 		value = _value
-		if $SpinBox && $SpinBox.value != _value:
+		if has_node("SpinBox") && $SpinBox.value != _value:
 			$SpinBox.value = value
+			
+signal send_value_changed()
 
 func section_name()->String:
 	return title.to_snake_case()
@@ -35,3 +37,4 @@ func _on_line_edit_text_changed(new_text):
 
 func _on_spin_box_value_changed(_value):
 	value = _value
+	emit_signal("send_value_changed")
