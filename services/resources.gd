@@ -19,6 +19,10 @@ const _cfg_extension = "json"
 const _scene_extension = "tscn"
 const _pwd = ""
 
+const _res_path = "res://"
+const _user_path = "user://"
+const _assets_path = "assets/"
+
 signal send_resource_loaded(path:String, res:Resource)
 signal send_resource_progress(progress:float)
 
@@ -133,12 +137,42 @@ func find_all_files_dict(start_dir:String, extension:String)->Dictionary:
 func find_all_files_array(start_dir:String, extension:String)->Array:
 	return find_all_files_dict(start_dir, extension).keys()
 	
+func find_all_cfg_files_dict(start_dir:String)->Dictionary:
+	var result:Dictionary
+	find_all_files_recursive(start_dir, _cfg_extension, result)
+	return result
+	
+func find_all_assets_cfg_files_dict(assets_type:String)->Dictionary:
+	var result:Dictionary
+	find_all_files_recursive(get_assets_path(assets_type), _cfg_extension, result)
+	return result
+	
+func find_all_cfg_files_array(start_dir:String)->Array:
+	return find_all_files_dict(start_dir, _cfg_extension).keys()
+	
+func find_all_scene_files_dict(start_dir:String)->Dictionary:
+	var result:Dictionary
+	find_all_files_recursive(start_dir, _scene_extension, result)
+	return result
+	
+func find_all_scene_files_array(start_dir:String)->Array:
+	return find_all_files_dict(start_dir, _scene_extension).keys()
+	
 func save_dict_to_json_file(path:String, dict:Dictionary):
 	var file = FileAccess.open_encrypted_with_pass(path, FileAccess.WRITE, _pwd) if !OS.is_debug_build() else FileAccess.open(path, FileAccess.WRITE)
 	if file:
 		file.store_line(JSON.stringify(dict))
 	else:
 		var message = "State service > File error(save):{0}, {1}".format([Helper.error_str[FileAccess.get_open_error()], path])
+		OS.alert(message)
+		
+func save_dict_to_cfg_file(path:String, dict:Dictionary):
+	var _path = path + "." + _cfg_extension
+	var file = FileAccess.open_encrypted_with_pass(_path, FileAccess.WRITE, _pwd) if !OS.is_debug_build() else FileAccess.open(_path, FileAccess.WRITE)
+	if file:
+		file.store_line(JSON.stringify(dict))
+	else:
+		var message = "State service > File error(save):{0}, {1}".format([Helper.error_str[FileAccess.get_open_error()], _path])
 		OS.alert(message)
 		
 func load_dict_from_json_file(path:String)->Dictionary:
@@ -154,6 +188,24 @@ func load_dict_from_json_file(path:String)->Dictionary:
 				OS.alert(message)
 		else:
 			var message = "State service > File error(load):{0}, {1}".format([Helper.error_str[FileAccess.get_open_error()], path])
+			OS.alert(message)
+
+	return {}
+	
+func load_dict_from_cfg_file(path:String)->Dictionary:
+	var _path = path + "." + _cfg_extension
+	if FileAccess.file_exists(_path):
+		var file = FileAccess.open_encrypted_with_pass(_path, FileAccess.READ, _pwd) if !OS.is_debug_build() else FileAccess.open(_path, FileAccess.READ)
+		if file:
+			var json = JSON.new()
+			var state = json.parse(file.get_as_text(true))
+			if state == OK:
+				return json.data
+			else:
+				var message = "State service > JSON Parse Error:{0} at line {1}, {2}".format([json.get_error_message(), json.get_error_line(), path])
+				OS.alert(message)
+		else:
+			var message = "State service > File error(load):{0}, {1}".format([Helper.error_str[FileAccess.get_open_error()], _path])
 			OS.alert(message)
 
 	return {}
@@ -211,3 +263,19 @@ func rename_file(old_file_path:String, new_name:String):
 
 func copy_file(old_file_path:String, new_name:String):
 	_change_file(old_file_path, new_name, Callable(DirAccess, "copy_absolute"))	
+
+func get_assets_path(assets_type:String)->String:
+	var res_dir_path = _res_path + _assets_path + assets_type
+	var user_dir_path = _user_path + _assets_path + assets_type
+	# В отладке создадим директорию в ресурсах если её нет
+	if OS.is_debug_build():
+		make_dir(res_dir_path)
+	
+	if DirAccess.dir_exists_absolute(user_dir_path):
+		return user_dir_path
+		
+	if DirAccess.dir_exists_absolute(res_dir_path):
+		return res_dir_path
+		
+	_logs.error("Recources service > path to assets directory {0} not exist.".format([_assets_path + assets_type]))
+	return ""

@@ -32,10 +32,10 @@ func _ready():
 	update()
 
 
-func _get_new_selected_name(suffix:String = "")->String:
+func _get_new_selected_name(suffix:String = _new_default_suffix)->String:
 	for index in $IL_collections.get_selected_items():
 		var new_name = $IL_collections.get_item_text(index)
-		while new_name in _collections.get_collections_array():
+		while new_name in _collections.get_collections():
 			new_name += suffix
 		return new_name
 	return ""
