@@ -1,0 +1,119 @@
+[gd_scene load_steps=12 format=3 uid="uid://blw5nypyyfofv"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/panels/collection/collections.gd" id="1_5brac"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/panels/collection/VBC_collections.gd" id="2_8bmeq"]
+[ext_resource type="PackedScene" uid="uid://daxuo6ssh0epv" path="res://addons/GameBackend/tools/widgets/common/edit item list/edit_item_list.tscn" id="3_hlf1u"]
+[ext_resource type="PackedScene" uid="uid://ds622gsou5yc3" path="res://addons/GameBackend/tools/widgets/common/item manager/hbc_manager.tscn" id="4_bmjgo"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/panels/collection/VBC_collection_items.gd" id="5_mqbjx"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/panels/collection/HBC_item_manage.gd" id="6_oosvf"]
+[ext_resource type="PackedScene" uid="uid://ts3el25w2mus" path="res://addons/GameBackend/tools/fields/common/combobox/hbc_combobox.tscn" id="7_h4id6"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/panels/collection/SC_props.gd" id="8_5u2yo"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/panels/collection/VBC_collection.gd" id="9_tagm2"]
+[ext_resource type="PackedScene" uid="uid://jleuscu18c6f" path="res://addons/GameBackend/tools/fields/common/int/hbc_int.tscn" id="10_f8eh0"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/panels/collection/VBC_item.gd" id="11_0ik1k"]
+
+[node name="collections" type="HBoxContainer"]
+custom_minimum_size = Vector2(200, 200)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_5brac")
+
+[node name="VBC_collections" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.7
+script = ExtResource("2_8bmeq")
+
+[node name="VBC_list" parent="VBC_collections" instance=ExtResource("3_hlf1u")]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 20.0
+fill_service = "collections"
+fill_method = "get_list"
+filter_method = "get_filtered_list"
+editable = true
+
+[node name="HBC_manager" parent="VBC_collections" instance=ExtResource("4_bmjgo")]
+layout_mode = 2
+
+[node name="VBC_collection_items" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.7
+script = ExtResource("5_mqbjx")
+
+[node name="VBC_list" parent="VBC_collection_items" instance=ExtResource("3_hlf1u")]
+layout_mode = 2
+size_flags_vertical = 3
+fill_service = "collections"
+fill_method = "get_current_collection_items"
+filter_method = ""
+
+[node name="HBC_item_manage" type="HBoxContainer" parent="VBC_collection_items"]
+layout_mode = 2
+script = ExtResource("6_oosvf")
+
+[node name="HBC_manager" parent="VBC_collection_items/HBC_item_manage" instance=ExtResource("4_bmjgo")]
+layout_mode = 2
+save = false
+clone = false
+
+[node name="HBC_combo" parent="VBC_collection_items/HBC_item_manage" instance=ExtResource("7_h4id6")]
+layout_mode = 2
+_fill_service = "collections"
+_fill_method = "get_current_can_add_items"
+
+[node name="SC_props" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_5u2yo")
+
+[node name="VBC_props" type="VBoxContainer" parent="SC_props"]
+layout_mode = 2
+
+[node name="VBC_collection" type="VBoxContainer" parent="SC_props/VBC_props"]
+visible = false
+layout_mode = 2
+script = ExtResource("9_tagm2")
+
+[node name="HBC_max_items" parent="SC_props/VBC_props/VBC_collection" instance=ExtResource("10_f8eh0")]
+layout_mode = 2
+title = "Max drop items"
+default_value = 1
+
+[node name="HBC_min_items" parent="SC_props/VBC_props/VBC_collection" instance=ExtResource("10_f8eh0")]
+layout_mode = 2
+title = "Min drop items"
+default_value = 1
+
+[node name="VBC_item" type="VBoxContainer" parent="SC_props/VBC_props"]
+visible = false
+layout_mode = 2
+script = ExtResource("11_0ik1k")
+
+[node name="HBC_drop_percent" parent="SC_props/VBC_props/VBC_item" instance=ExtResource("10_f8eh0")]
+layout_mode = 2
+title = "Drop percent"
+default_value = 100
+
+[connection signal="send_collection_selected" from="VBC_collections" to="." method="_on_vbc_collections_send_collection_selected"]
+[connection signal="send_change_item" from="VBC_collections/VBC_list" to="VBC_collections" method="_on_vbc_list_send_change_item"]
+[connection signal="send_filtering" from="VBC_collections/VBC_list" to="." method="_on_vbc_list_send_filtering"]
+[connection signal="send_select" from="VBC_collections/VBC_list" to="VBC_collections" method="_on_vbc_list_send_select"]
+[connection signal="send_clone" from="VBC_collections/HBC_manager" to="VBC_collections" method="_on_hbc_manager_send_clone"]
+[connection signal="send_create" from="VBC_collections/HBC_manager" to="VBC_collections" method="_on_hbc_manager_send_create"]
+[connection signal="send_delete" from="VBC_collections/HBC_manager" to="VBC_collections" method="_on_hbc_manager_send_delete"]
+[connection signal="send_save" from="VBC_collections/HBC_manager" to="." method="_on_hbc_manager_send_save"]
+[connection signal="send_select" from="VBC_collection_items/VBC_list" to="." method="_on_vbc_list_send_select_collection_item"]
+[connection signal="send_add" from="VBC_collection_items/HBC_item_manage" to="VBC_collection_items" method="_on_hbc_item_manage_send_add"]
+[connection signal="send_remove_selected" from="VBC_collection_items/HBC_item_manage" to="VBC_collection_items" method="_on_hbc_item_manage_send_remove_selected"]
+[connection signal="send_create" from="VBC_collection_items/HBC_item_manage/HBC_manager" to="VBC_collection_items/HBC_item_manage" method="_on_hbc_manager_send_create"]
+[connection signal="send_delete" from="VBC_collection_items/HBC_item_manage/HBC_manager" to="VBC_collection_items/HBC_item_manage" method="_on_hbc_manager_send_delete"]
+[connection signal="send_change_int_value" from="SC_props/VBC_props/VBC_collection/HBC_max_items" to="SC_props/VBC_props/VBC_collection" method="_on_hbc_max_items_send_change_int_value"]
+[connection signal="send_change_int_value" from="SC_props/VBC_props/VBC_collection/HBC_min_items" to="SC_props/VBC_props/VBC_collection" method="_on_hbc_min_items_send_change_int_value"]
+[connection signal="send_change_int_value" from="SC_props/VBC_props/VBC_item/HBC_drop_percent" to="SC_props/VBC_props/VBC_item" method="_on_hbc_drop_percent_send_change_int_value"]

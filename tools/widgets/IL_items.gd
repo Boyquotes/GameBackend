@@ -6,8 +6,11 @@ var _items:Items = Services.items
 signal send_selected_item(name:String)
 
 func _ready():
+	update()
+		
+func update():
 	clear()
-	for name in _items.get_items_list():
+	for name in _items.get_items():
 		add_item(name)
 
 func _on_item_clicked(index, at_position, mouse_button_index):

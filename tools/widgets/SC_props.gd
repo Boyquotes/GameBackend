@@ -21,12 +21,9 @@ func update_item_props(item_name:String):
 	$P_props/VBC_item_props.deserialize(dict)
 	_current_item = item_name
 
-
-func _on_vbc_item_props_send_item_changed():
-	if not _current_collection.is_empty() && not _current_item.is_empty():
-		_collections.add_collection_item(_current_item, $P_props/VBC_item_props.serialize())
-
-
-func _on_vbc_collection_props_send_item_changed():
-	if not _current_collection.is_empty():
+func save_current():
+	if not _current_collection.is_empty() && _current_item.is_empty():
 		_collections.add_collection_props(_current_collection, $P_props/VBC_collection_props.serialize())
+	if not _current_item.is_empty():
+		_collections.add_collection_item(_current_item, $P_props/VBC_item_props.serialize())
+	_collections.save_current_collection()

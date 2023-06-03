@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://nn0i5qn7yw00"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/fields/common/checker/HBC_checker.gd" id="1_jeq5w"]
+
+[node name="HBC_checker" type="HBoxContainer"]
+anchors_preset = -1
+anchor_right = 0.147
+anchor_bottom = 0.04
+offset_right = -169.344
+offset_bottom = -25.92
+theme_override_constants/separation = 5
+script = ExtResource("1_jeq5w")
+
+[node name="L_title" type="Label" parent="."]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Title"
+clip_text = true
+
+[node name="CB_checker" type="CheckButton" parent="."]
+layout_mode = 2
+
+[connection signal="toggled" from="CB_checker" to="." method="_on_cb_checker_toggled"]

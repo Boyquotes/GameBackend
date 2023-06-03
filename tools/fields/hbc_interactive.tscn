@@ -4,9 +4,9 @@
 
 [node name="HBC_interactive" type="HBoxContainer"]
 anchors_preset = -1
-anchor_right = 0.236
+anchor_right = 0.282
 anchor_bottom = 0.048
-offset_right = -271.872
+offset_right = -324.864
 offset_bottom = -31.104
 theme_override_constants/separation = 5
 script = ExtResource("1_allvv")
@@ -15,22 +15,13 @@ script = ExtResource("1_allvv")
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Interactive ID"
-horizontal_alignment = 2
 clip_text = true
 
 [node name="OB_id" type="OptionButton" parent="."]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 tooltip_text = "Select any other than the current ID"
-item_count = 5
+item_count = 1
 selected = 0
-popup/item_0/text = "BLUE_TILE"
+popup/item_0/text = "None"
 popup/item_0/id = 0
-popup/item_1/text = "PERIMETR"
-popup/item_1/id = 1
-popup/item_2/text = "BALL_FINISH"
-popup/item_2/id = 2
-popup/item_3/text = "SLIDER"
-popup/item_3/id = 3
-popup/item_4/text = "BALL"
-popup/item_4/id = 4

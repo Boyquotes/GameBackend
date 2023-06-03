@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/P_properties.gd" id="1_ws5ax"]
 [ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/VBC_location.gd" id="2_8jf12"]
-[ext_resource type="PackedScene" uid="uid://jleuscu18c6f" path="res://addons/GameBackend/tools/fields/hbc_int.tscn" id="3_mwwvv"]
+[ext_resource type="PackedScene" uid="uid://jleuscu18c6f" path="res://addons/GameBackend/tools/fields/common/int/hbc_int.tscn" id="3_mwwvv"]
 [ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/VBC_level.gd" id="4_ovbg0"]
 
 [node name="P_properties" type="Panel"]

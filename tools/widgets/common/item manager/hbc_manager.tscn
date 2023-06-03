@@ -1,25 +1,30 @@
 [gd_scene load_steps=6 format=3 uid="uid://ds622gsou5yc3"]
 
-[ext_resource type="Texture2D" uid="uid://cnsvnra80dfhk" path="res://addons/GameBackend/icons/PNG/White/1x/plus.png" id="1_r6kxg"]
-[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/common/item manager/hbc_manager.gd" id="1_x3vst"]
-[ext_resource type="Texture2D" uid="uid://bkdnq67ly2u1u" path="res://addons/GameBackend/icons/PNG/White/1x/minus.png" id="2_lvi68"]
-[ext_resource type="Texture2D" uid="uid://d3ulys7pnxnhg" path="res://addons/GameBackend/icons/PNG/White/1x/save.png" id="3_6nm31"]
-[ext_resource type="Texture2D" uid="uid://bp5ham7hwluhk" path="res://addons/GameBackend/icons/PNG/White/1x/multiplayer.png" id="4_785o5"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/common/item manager/hbc_manager.gd" id="1_t8rd5"]
+[ext_resource type="Texture2D" uid="uid://cnsvnra80dfhk" path="res://addons/GameBackend/icons/PNG/White/1x/plus.png" id="2_p1iau"]
+[ext_resource type="Texture2D" uid="uid://bkdnq67ly2u1u" path="res://addons/GameBackend/icons/PNG/White/1x/minus.png" id="3_uodse"]
+[ext_resource type="Texture2D" uid="uid://d3ulys7pnxnhg" path="res://addons/GameBackend/icons/PNG/White/1x/save.png" id="4_dhph0"]
+[ext_resource type="Texture2D" uid="uid://bp5ham7hwluhk" path="res://addons/GameBackend/icons/PNG/White/1x/multiplayer.png" id="5_4hpyv"]
 
 [node name="HBC_manager" type="HBoxContainer"]
 anchors_preset = -1
-anchor_right = 0.292
+anchor_right = 0.124
 anchor_bottom = 0.048
-offset_right = -0.384033
+offset_right = 0.151993
 offset_bottom = -0.104
 size_flags_vertical = 10
-script = ExtResource("1_x3vst")
+script = ExtResource("1_t8rd5")
+create = true
+delete = true
+save = true
+clone = true
+metadata/_edit_use_anchors_ = true
 
 [node name="TB_create" type="TextureButton" parent="."]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 tooltip_text = "Add new card"
-texture_normal = ExtResource("1_r6kxg")
+texture_normal = ExtResource("2_p1iau")
 ignore_texture_size = true
 stretch_mode = 4
 
@@ -27,7 +32,7 @@ stretch_mode = 4
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 tooltip_text = "Remove selected card"
-texture_normal = ExtResource("2_lvi68")
+texture_normal = ExtResource("3_uodse")
 ignore_texture_size = true
 stretch_mode = 4
 
@@ -35,7 +40,7 @@ stretch_mode = 4
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 tooltip_text = "Find substring in the ID list or ID blocks"
-texture_normal = ExtResource("3_6nm31")
+texture_normal = ExtResource("4_dhph0")
 ignore_texture_size = true
 stretch_mode = 4
 
@@ -43,17 +48,11 @@ stretch_mode = 4
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 tooltip_text = "Find substring in the ID list or ID blocks"
-texture_normal = ExtResource("4_785o5")
+texture_normal = ExtResource("5_4hpyv")
 ignore_texture_size = true
 stretch_mode = 4
-
-[node name="LE_find_str" type="LineEdit" parent="."]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-placeholder_text = "filter"
 
 [connection signal="pressed" from="TB_create" to="." method="_on_tb_create_pressed"]
 [connection signal="pressed" from="TB_delete" to="." method="_on_tb_delete_pressed"]
 [connection signal="pressed" from="TB_save" to="." method="_on_tb_save_pressed"]
 [connection signal="pressed" from="TB_clone" to="." method="_on_tb_clone_pressed"]
-[connection signal="text_submitted" from="LE_find_str" to="." method="_on_le_find_str_text_submitted"]

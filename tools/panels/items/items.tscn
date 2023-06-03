@@ -1,0 +1,71 @@
+[gd_scene load_steps=9 format=3 uid="uid://yiq1negd8xur"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/panels/items/items.gd" id="1_itevk"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/panels/items/VBC_items.gd" id="2_8fprd"]
+[ext_resource type="PackedScene" uid="uid://daxuo6ssh0epv" path="res://addons/GameBackend/tools/widgets/common/edit item list/edit_item_list.tscn" id="3_3rup7"]
+[ext_resource type="PackedScene" uid="uid://ds622gsou5yc3" path="res://addons/GameBackend/tools/widgets/common/item manager/hbc_manager.tscn" id="4_6ru53"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/panels/items/SC_props.gd" id="5_u33b7"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/panels/items/VBC_item.gd" id="6_sxinx"]
+[ext_resource type="PackedScene" uid="uid://ts3el25w2mus" path="res://addons/GameBackend/tools/fields/common/combobox/hbc_combobox.tscn" id="7_iprsk"]
+[ext_resource type="PackedScene" uid="uid://nn0i5qn7yw00" path="res://addons/GameBackend/tools/fields/common/checker/hbc_checker.tscn" id="8_p2qxp"]
+
+[node name="items" type="HBoxContainer"]
+custom_minimum_size = Vector2(200, 200)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_itevk")
+
+[node name="VBC_items" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.7
+script = ExtResource("2_8fprd")
+
+[node name="VBC_list" parent="VBC_items" instance=ExtResource("3_3rup7")]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 20.0
+fill_service = "items"
+fill_method = "get_items"
+filter_method = null
+
+[node name="HBC_manager" parent="VBC_items" instance=ExtResource("4_6ru53")]
+layout_mode = 2
+create = false
+delete = false
+clone = false
+
+[node name="SC_props" type="ScrollContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("5_u33b7")
+
+[node name="VBC_item" type="VBoxContainer" parent="SC_props"]
+layout_mode = 2
+script = ExtResource("6_sxinx")
+
+[node name="HBC_interactive" parent="SC_props/VBC_item" instance=ExtResource("7_iprsk")]
+layout_mode = 2
+_title = "Bind interactive"
+_fill_service = "interactives"
+_fill_method = ""
+
+[node name="HBC_collection" parent="SC_props/VBC_item" instance=ExtResource("7_iprsk")]
+layout_mode = 2
+_title = ""
+_fill_service = ""
+_fill_method = ""
+
+[node name="HBC_accrue" parent="SC_props/VBC_item" instance=ExtResource("8_p2qxp")]
+layout_mode = 2
+title = ""
+
+[connection signal="send_item_save" from="VBC_items" to="." method="_on_vbc_items_send_item_save"]
+[connection signal="send_item_selected" from="VBC_items" to="." method="_on_vbc_items_send_item_selected"]
+[connection signal="send_select" from="VBC_items/VBC_list" to="VBC_items" method="_on_vbc_list_send_select"]
+[connection signal="send_save" from="VBC_items/HBC_manager" to="VBC_items" method="_on_hbc_manager_send_save"]
+[connection signal="send_changed" from="SC_props/VBC_item/HBC_accrue" to="SC_props/VBC_item" method="_on_hbc_accrue_send_changed"]

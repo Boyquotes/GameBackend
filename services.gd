@@ -1,4 +1,5 @@
 # Ленивая инициализация сервисов, реализация паттерна сервис локатор
+# ВАЖНО! Сервисы, к которым нужно обратиться - необходимо инициализировать ДО создания узла(в родителе)!
 @tool
 extends Node
 
@@ -18,6 +19,8 @@ func _ready():
 func _get_singleton(service, path:String):
 	if service == null:
 		service = load(path).new()
+		var serv_name = path.get_file().trim_suffix(".gd")
+		service.name = serv_name
 		add_child(service)
 	return service
 
@@ -91,4 +94,10 @@ var collections = null :
 		if !collections:
 			collections = _get_singleton(collections, "res://addons/GameBackend/services/collections.gd")
 		return collections
+		
+var interactives = null :
+	get:
+		if !interactives:
+			interactives = _get_singleton(interactives, "res://addons/GameBackend/services/interactives.gd" )
+		return interactives
 		

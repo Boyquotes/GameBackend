@@ -5,12 +5,13 @@
 
 [node name="HBC_id_file" type="HBoxContainer"]
 anchors_preset = -1
-anchor_right = 0.236
+anchor_right = 0.686
 anchor_bottom = 0.048
-offset_right = -271.872
+offset_right = -790.272
 offset_bottom = -31.104
 theme_override_constants/separation = 5
 script = ExtResource("1_4dwid")
+metadata/_edit_use_anchors_ = true
 
 [node name="L_id" type="Label" parent="."]
 custom_minimum_size = Vector2(120, 0)

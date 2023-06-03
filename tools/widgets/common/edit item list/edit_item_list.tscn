@@ -1,22 +1,31 @@
 [gd_scene load_steps=3 format=3 uid="uid://daxuo6ssh0epv"]
 
-[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/common/edit item list/edit_item_list.gd" id="1_5p4fb"]
-[ext_resource type="PackedScene" uid="uid://bjji65p3aeew5" path="res://addons/GameBackend/tools/widgets/common/edit panel/p_edit.tscn" id="1_5rshv"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/common/edit item list/edit_item_list.gd" id="1_7c46o"]
+[ext_resource type="PackedScene" uid="uid://bjji65p3aeew5" path="res://addons/GameBackend/tools/widgets/common/edit panel/p_edit.tscn" id="2_pekah"]
 
-[node name="IL" type="ItemList"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="VBC_list" type="VBoxContainer"]
+anchors_preset = -1
+anchor_right = 0.256
+anchor_bottom = 0.599
+offset_right = 0.0879822
+offset_bottom = -0.152039
+script = ExtResource("1_7c46o")
+filter_method = null
+metadata/_edit_use_anchors_ = true
+
+[node name="LE_filter" type="LineEdit" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+placeholder_text = "filter"
+
+[node name="IL" type="ItemList" parent="."]
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 20.0
-item_count = 1
-item_0/text = "test"
-script = ExtResource("1_5p4fb")
 
-[node name="P_edit" parent="." instance=ExtResource("1_5rshv")]
+[node name="P_edit" parent="IL" instance=ExtResource("2_pekah")]
 visible = false
 layout_mode = 0
 anchors_preset = 0
@@ -25,5 +34,6 @@ anchor_bottom = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
 
-[connection signal="item_clicked" from="." to="." method="_on_item_clicked"]
-[connection signal="send_new_text" from="P_edit" to="." method="_on_p_edit_send_new_text"]
+[connection signal="text_submitted" from="LE_filter" to="." method="_on_le_filter_text_submitted"]
+[connection signal="item_clicked" from="IL" to="." method="_on_il_item_clicked"]
+[connection signal="send_new_text" from="IL/P_edit" to="." method="_on_p_edit_send_new_text"]

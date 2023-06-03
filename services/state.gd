@@ -98,7 +98,7 @@ func set_dict(key:String, dict:Dictionary):
 	_is_data_changed = true
 	
 func get_dict(key:String)->Dictionary:
-	return _user_data[key] if _user_data.has(key) else {}
+	return _user_data.get(key, {})
 	
 func _thread_process():
 	while true:

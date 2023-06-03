@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://6mhc8va5ee8"]
+
+[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/hbc_manage_buttons.gd" id="1_4t1xr"]
+[ext_resource type="Texture2D" uid="uid://cnsvnra80dfhk" path="res://addons/GameBackend/icons/PNG/White/1x/plus.png" id="1_lppyd"]
+[ext_resource type="Texture2D" uid="uid://bkdnq67ly2u1u" path="res://addons/GameBackend/icons/PNG/White/1x/minus.png" id="2_1f08t"]
+[ext_resource type="Texture2D" uid="uid://bp5ham7hwluhk" path="res://addons/GameBackend/icons/PNG/White/1x/multiplayer.png" id="4_0jtk0"]
+
+[node name="HBC_manage_buttons" type="HBoxContainer"]
+script = ExtResource("1_4t1xr")
+
+[node name="TB_create" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+tooltip_text = "Добавить предмет в коллекцию"
+texture_normal = ExtResource("1_lppyd")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="TB_delete" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+tooltip_text = "Удалить предмет из коллекции"
+texture_normal = ExtResource("2_1f08t")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="TB_clone" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+tooltip_text = "Удалить предмет из коллекции"
+texture_normal = ExtResource("4_0jtk0")
+ignore_texture_size = true
+stretch_mode = 4
+
+[connection signal="pressed" from="TB_create" to="." method="_on_tb_create_pressed"]
+[connection signal="pressed" from="TB_delete" to="." method="_on_tb_delete_pressed"]
+[connection signal="pressed" from="TB_clone" to="." method="_on_tb_clone_pressed"]

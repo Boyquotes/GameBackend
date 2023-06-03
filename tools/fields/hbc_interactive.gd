@@ -1,13 +1,18 @@
 @tool
 extends HBoxContainer
 
-@onready var _resources:Resources = Services.resource
+var _interactives:Interactives = Services.interactives
+const _none = "None"
 
 func _ready():
+	update()
+		
+func update(exclude_list:PackedStringArray = []):
 	$OB_id.clear()
-	var id_list = _resources.find_all_interactives_array()
-	for item in id_list:
-		$OB_id.add_item(item)
+	$OB_id.add_item(_none)
+	for item in _interactives.get_items_list():
+		if item not in exclude_list:
+			$OB_id.add_item(item)
 	
 func serialize()->Dictionary:
 	return {
@@ -25,4 +30,5 @@ func deserialize(dict:Dictionary):
 			if $OB_id.get_item_text(index) == title:
 				$OB_id.select(index)
 				break
+				
 	

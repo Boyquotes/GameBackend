@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://jleuscu18c6f"]
 
-[ext_resource type="Script" path="res://addons/GameBackend/tools/fields/hbc_int.gd" id="1_15a1f"]
+[ext_resource type="Script" path="res://addons/GameBackend/tools/fields/common/int/hbc_int.gd" id="1_qwhbp"]
 
 [node name="HBC_int" type="HBoxContainer"]
 anchors_preset = -1
@@ -9,19 +9,16 @@ anchor_bottom = 0.048
 offset_right = -288.0
 offset_bottom = -31.104
 theme_override_constants/separation = 5
-script = ExtResource("1_15a1f")
-value = -1
+script = ExtResource("1_qwhbp")
 
 [node name="Label" type="Label" parent="."]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-text = "Field name"
 clip_text = true
 
 [node name="SpinBox" type="SpinBox" parent="."]
 layout_mode = 2
 min_value = -1.0
 max_value = 1e+07
-value = -1.0
 
 [connection signal="value_changed" from="SpinBox" to="." method="_on_spin_box_value_changed"]

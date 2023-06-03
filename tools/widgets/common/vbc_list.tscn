@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://f0ul2d2tmtsi"]
-
-[ext_resource type="Script" path="res://addons/GameBackend/tools/widgets/common/VBC_list.gd" id="1_ey73l"]
-
-[node name="VBC_list" type="VBoxContainer"]
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("1_ey73l")

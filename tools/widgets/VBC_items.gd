@@ -3,18 +3,18 @@ extends VBoxContainer
 
 @onready var _collections:Collections = Services.collections
 var _current_collection_name:String
-@onready var _OB_can_add_items = $HBC_items_manager/OB_can_add_items
-var _filter:String
+#@onready var _OB_can_add_items = $HBC_items_manager/OB_can_add_items
+#var _filter:String
 
 signal send_selected_item(item_name:String)
 
 
 func _ready():
-	_OB_can_add_items.clear()
+	#_OB_can_add_items.clear()
 	$IL_items.clear()
 
 func update(collection_name:String):
-	_OB_can_add_items.clear()
+	#_OB_can_add_items.clear()
 	$IL_items.clear()
 	
 	if _filter.is_empty():

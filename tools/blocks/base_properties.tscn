@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://un06vfyqyj4w" path="res://addons/GameBackend/icons/PNG/White/1x/down.png" id="1_nk7kh"]
 [ext_resource type="Script" path="res://addons/GameBackend/tools/blocks/base_properties.gd" id="1_sjqoh"]
 [ext_resource type="Texture2D" uid="uid://d0d7xkpdwod5g" path="res://addons/GameBackend/icons/PNG/White/1x/forward.png" id="2_xb01d"]
-[ext_resource type="PackedScene" uid="uid://jleuscu18c6f" path="res://addons/GameBackend/tools/fields/hbc_int.tscn" id="4_8388d"]
+[ext_resource type="PackedScene" uid="uid://jleuscu18c6f" path="res://addons/GameBackend/tools/fields/common/int/hbc_int.tscn" id="4_8388d"]
 [ext_resource type="PackedScene" uid="uid://cajhayoe67wfx" path="res://addons/GameBackend/tools/widgets/vbc_static_fields.tscn" id="4_fm8ik"]
 [ext_resource type="Texture2D" uid="uid://d0p043fepjt2q" path="res://addons/GameBackend/icons/PNG/White/1x/share2.png" id="4_xl6d4"]
 

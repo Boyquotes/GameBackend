@@ -11,6 +11,7 @@ const _new_default_suffix = "_new"
 
 # Сигнал в правую панель для отображения элементов коллекции и настроек.
 signal send_select_collection(collection_name:String)
+signal send_save_current()
 
 func update():
 	$IL_collections.clear()
@@ -27,10 +28,8 @@ func add_item(collection_name:String = _default_collection):
 	_collections.add_collection(collection_name)
 	emit_signal("send_select_collection", collection_name)
 
-
 func _ready():
 	update()
-
 
 func _get_new_selected_name(suffix:String = _new_default_suffix)->String:
 	for index in $IL_collections.get_selected_items():
@@ -40,17 +39,14 @@ func _get_new_selected_name(suffix:String = _new_default_suffix)->String:
 		return new_name
 	return ""
 
-
 func _on_il_collections_item_clicked(index, at_position, mouse_button_index):
 	if MOUSE_BUTTON_RIGHT != mouse_button_index:
 		emit_signal("send_select_collection", $IL_collections.get_item_text(index))
-
 
 func _on_il_collections_send_change_item(old_name, new_name):
 	if not new_name.is_empty():
 		_collections.rename_collection(old_name, new_name)
 		_collections.update()
-
 
 func _on_hbc_manager_send_clone():
 	for index in $IL_collections.get_selected_items():
@@ -61,17 +57,14 @@ func _on_hbc_manager_send_clone():
 			update()
 		return
 
-
 func _on_hbc_manager_send_create():
 	add_item()
-
 
 func _on_hbc_manager_send_delete():
 	for index in $IL_collections.get_selected_items():
 		_collections.remove_collection($IL_collections.get_item_text(index))
 		$IL_collections.remove_item(index)
 	emit_signal("send_select_collection", "")
-
 
 func _on_hbc_manager_send_find(new_text):
 	# Удалили текст запроса - возвращаем полный список.
@@ -84,7 +77,7 @@ func _on_hbc_manager_send_find(new_text):
 		for _name in names:
 			$IL_collections.add_item(_name)
 
-
 func _on_hbc_manager_send_save():
-	_collections.save_current_collection()
+	#_collections.save_current_collection()
+	emit_signal("send_save_current")
 
